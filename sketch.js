@@ -2,13 +2,22 @@
 const SKETCH_WIDTH = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight * 16 / 9);
 const SKETCH_HEIGHT = Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth * 9 / 16);
 
+// Declare variables to preload images
+let clientHappyImg, clientIrritatedImg, clientAngryImg;
+
+function preload() {
+	clientHappyImg = loadImage("../images/client/happy.png");
+	clientIrritatedImg = loadImage("../images/client/irritated.png");
+	clientAngryImg = loadImage("../images/client/angry.png");
+}
+
+let client;
 function setup() {
 	new Canvas(SKETCH_WIDTH, SKETCH_HEIGHT);
-
-	let ball = new Sprite();
-	ball.diameter = 50;
+	
+	client = new Client("User", "12345", clientHappyImg, clientIrritatedImg, clientAngryImg);	
 }
 
 function draw() {
-	background('grey');
+	background('#202020');
 }
