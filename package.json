@@ -1,0 +1,10 @@
+{
+    "name": "youre-the-server",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+      "server": "python -m http.server 8000"
+    },
+    "author": "",
+    "license": "ISC"
+}

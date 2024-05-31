@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEP WA4</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- client backend -->
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="flex w-screen h-screen flex-col" id="main-div">
+        <div class="flex flex-col p-8 m-auto w-screen max-w-screen-sm bg-base-100 rounded-md drop-shadow-lg">
+            <img class="mx-auto my-0" width="96" height="96" src="./images/server-icon.png" alt="server-icon" />
+
+            <h1 class="mx-auto my-0 font-bold text-2xl">You're the Server!</h1>
+            <p class="mt-2 text-md mx-auto my-0">A game where you are a chat server.</p>
+
+            <button class="mt-6 flex-none btn btn-primary" onclick="startGame()">Start game</button>
+            <button class="mt-4 flex-none btn btn-neutral" onclick="howToPlay()">How to play</button>
+            <button class="mt-4 flex-none btn btn-neutral" onclick="aboutGame()">About game</button>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    /* For background image */
+    #main-div::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: -1;
+
+        display: block;
+        background-image: url('./images/menu-bg.jpg');
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+
+        transform: scale(1.02);
+        filter: blur(5px);
+    }
+</style>
