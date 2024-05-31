@@ -1,17 +1,20 @@
 class Client {
-    constructor(clientName, clientRoomCode, happyImg, irritatedImg, angryImg) {
+    constructor(clientName, clientRoomCode, clientCollection, happyImg, irritatedImg, angryImg, fontStyle) {
         // Assign args to variables
         this.username = clientName;
         this.roomCode = clientRoomCode;
         this.happyImg = happyImg;
         this.irritatedImg = irritatedImg;
         this.angryImg = angryImg;
+        this.fontStyle = fontStyle;
+        this.clientCollection = clientCollection;
 
         // Clients can be happy, irritated, or angry
         this.clientStates = {
             Happy: 0,
             Irritated: 1,
-            Angry: 2
+            Angry: 2,
+            Dead: 3
         }
         // Set the initial state to happy
         this.clientState = this.clientStates.Happy;
@@ -20,11 +23,13 @@ class Client {
         this.sprite = new Sprite();
         this.sprite.collider = 'static';
         this.sprite.overlaps(allSprites);
+        // Note that because we are overriding the sprite's draw function,
+        // the x y of the position of the sprite now takes the center of the sprite as reference
         this.sprite.draw = () => {
             push();
 
             // Size of sprite should be based on sketch size, so everything scales properly
-            let spriteLength = ((width * 1/6) - 20) / 3;
+            let spriteLength = width * 1/6 * 1/4;
 
             noStroke();
             // Change the fill color based on the client state
@@ -58,11 +63,12 @@ class Client {
 
             // Draw text
             fill("black");
+            textFont(this.fontStyle);
             textSize(spriteLength / 1.1 / this.username.length);
             // hacky numbers
             text(this.username, (-spriteLength / 2) + spriteLength / 10, imgY + imgH + spriteLength / 12);
             textSize(spriteLength / 1.1 / 4);
-            text(this.roomCode, (-spriteLength / 2) + spriteLength / 12, imgY + imgH + spriteLength / 3);
+            text(this.roomCode, (-spriteLength / 2) + spriteLength / 11, imgY + imgH + spriteLength / 3);
 
             pop();
         }
@@ -76,7 +82,8 @@ class Client {
                 this.clientState = this.clientStates.Angry;
             }
             else if(this.clientState == this.clientStates.Angry) {
-                // TODO
+                this.clientCollection.remove(this);
+                clearInterval(this.clientTimer);
             }
         }, 5000);
     }
