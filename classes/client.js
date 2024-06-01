@@ -64,7 +64,7 @@ class Client {
             // Draw text
             fill("black");
             textFont(this.fontStyle);
-            textSize(spriteLength / 1.1 / this.username.length);
+            textSize(spriteLength / 5);
             // hacky numbers
             text(this.username, (-spriteLength / 2) + spriteLength / 10, imgY + imgH + spriteLength / 12);
             textSize(spriteLength / 1.1 / 4);
