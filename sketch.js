@@ -17,8 +17,11 @@ let interLight, interNormal, interBold;
 // ClientCollection object for the "New Clients" section
 let newClientsCollection;
 
+// RoomCollection object so users can create new rooms
+let roomsCollection;
+
 // Array of valid room codes that the clients can take (player will create rooms based on these codes)
-let validRoomCodes = ["19283", "58124", "92641", "38201", "10358"];
+let validRoomCodes = ["19283", "58124", "92641", "38201", "10358", "72912"];
 
 function preload() {
 	// Preload resources
@@ -36,14 +39,29 @@ function setup() {
 
 	randomWordClass = new RandomWords();
 
+	// Create test room and client sprites so we can get their width
+	let testClientSprite = new Client("Test", 
+		validRoomCodes[Math.floor(random(0, validRoomCodes.length))], 
+		null, 
+		clientHappyImg, 
+		clientIrritatedImg, 
+		clientAngryImg, 
+		interNormal);
+
 	// Area where new clients are spawned
-	newClientsCollection = new ClientCollection(width * 0.02, height * 0.02, 9, 3, "New clients", interBold);
+	newClientsCollection = new SpriteCollection(width * 0.02, height * 0.02, 9, 3, testClientSprite.w, testClientSprite.h, '=', "New clients", interBold);
+	let testRoomSprite = new SpriteCollection(width * 0.02, height * 0.02, 3, 3, testClientSprite.w, testClientSprite.h, 'x', "Room", interBold);
+	// Areas where rooms are held
+	roomsCollection = new SpriteCollection(width * 0.04 + newClientsCollection.w, height * 0.02, 2, 3, testRoomSprite.w, testRoomSprite.h, '#', "Rooms", interBold);
+
+	testClientSprite.remove();
+	testRoomSprite.removeAllSprites()
 }
 
 function draw() {
 	background('#202020');
 
-	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddClient() == true) {
+	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true) {
 		// Add a new client
 		// Username should be max 6 chars long
 		let username = capitalizeFirstLetter(randomWordClass.generateWordWithMaxLength(4)) + Math.floor(random(10, 100));

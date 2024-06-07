@@ -25,6 +25,11 @@ class Client {
         this.sprite.overlaps(allSprites);
         // Note that because we are overriding the sprite's draw function,
         // the x y of the position of the sprite now takes the center of the sprite as reference
+
+        // Size of sprite should be based on sketch size, so everything scales properly
+        this.w = width * 1/6 * 1/4;
+        this.h = width * 1/6 * 1/4;
+        
         this.sprite.draw = () => {
             push();
 
@@ -86,5 +91,10 @@ class Client {
                 clearInterval(this.clientTimer);
             }
         }, 5000);
+    }
+
+    remove() {
+        clearInterval(this.clientTimer);
+        this.sprite.remove();
     }
 }
