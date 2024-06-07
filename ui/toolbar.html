@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEP WA4</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- client backend -->
+    <script src="./toolbar.js"></script>
+</head>
+
+<body>
+    <div id="parent-div" class="p-4">
+        <h1 class="text-xl font-bold">Statistics</h1>
+        <p class="text-md mt-2">User Satisfaction:</p>
+        <progress class="progress w-56" value="70" max="100"></progress>
+        
+        <h1 class="text-xl font-bold mt-4">Actions</h1>
+
+        <div id="room-collection-actions" class="mt-2">
+            <input type="text" placeholder="Enter Room Code" class="input input-bordered input-primary w-56 mr-2" />
+            <button class="btn btn-primary">Add new room</button>
+        </div>
+
+        <div id="room-actions" class="mt-2">
+            <button class="btn btn-primary">Delete room</button>
+        </div>
+
+        <div id="new-client-actions" class="mt-2">
+            <div>
+                <select class="select select-primary w-56">
+                    <option selected>What is the best TV show?</option>
+                    <option>Game of Thrones</option>
+                    <option>Lost</option>
+                    <option>Breaking Bad</option>
+                    <option>Walking Dead</option>
+                  </select>
+                <button class="btn btn-primary">Add client to room</button>
+            </div>
+           
+            <button class="btn btn-primary mt-2">Kick Client</button>
+        </div>
+    </div>
+</body>
+
+<style>
+    body {
+        height: 100% !important;
+        background-color: #2b2b2b !important;
+    }
+
+    h1,
+    p,
+    button {
+        font-family: "Inter", sans-serif !important;
+    }
+
+    h1,
+    p {
+        color: white !important;
+    }
+</style>
+
+</html>
