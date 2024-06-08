@@ -22,36 +22,42 @@
         <h1 class="text-xl font-bold">Statistics</h1>
         <p class="text-md mt-2">User Satisfaction:</p>
         <progress class="progress w-56" value="70" max="100"></progress>
-        
+
         <h1 class="text-xl font-bold mt-4">Actions</h1>
 
-        <div id="room-collection-actions" class="mt-2">
-            <input type="text" placeholder="Enter Room Code" class="input input-bordered input-primary w-56 mr-2" />
-            <button class="btn btn-primary">Add new room</button>
+        <div id="room-collection-actions" class="mt-2 hidden">
+            <input type="text" placeholder="Enter Room Code" class="input input-bordered input-primary w-full" />
+            <button class="btn btn-primary w-full mt-2">Add new room</button>
         </div>
 
-        <div id="room-actions" class="mt-2">
-            <button class="btn btn-primary">Delete room</button>
+        <div id="room-actions" class="mt-2 hidden">
+            <button class="btn btn-primary w-full">Delete room</button>
         </div>
 
-        <div id="new-client-actions" class="mt-2">
+        <div id="new-client-actions" class="mt-2 hidden">
             <div>
-                <select class="select select-primary w-56">
-                    <option selected>What is the best TV show?</option>
-                    <option>Game of Thrones</option>
-                    <option>Lost</option>
-                    <option>Breaking Bad</option>
-                    <option>Walking Dead</option>
-                  </select>
-                <button class="btn btn-primary">Add client to room</button>
+                <select class="select select-primary w-full">
+                    <option selected>Select a room</option>
+                </select>
+                <button class="btn btn-primary w-full mt-2">Add client to room</button>
             </div>
-           
-            <button class="btn btn-primary mt-2">Kick Client</button>
+
+            <button class="btn btn-secondary w-full mt-2">Kick Client</button>
+        </div>
+
+        <div id="added-client-actions" class="mt-2 hidden">
+            <button class="btn btn-primary w-full">Resolve client requests</button>
         </div>
     </div>
 </body>
 
 <style>
+    html,
+    body {
+        margin: 0;
+        min-height: 100vh !important;
+    }
+
     body {
         height: 100% !important;
         background-color: #2b2b2b !important;
@@ -59,7 +65,8 @@
 
     h1,
     p,
-    button {
+    button,
+    select {
         font-family: "Inter", sans-serif !important;
     }
 

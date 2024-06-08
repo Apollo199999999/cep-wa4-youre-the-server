@@ -97,4 +97,8 @@ class Client {
         clearInterval(this.clientTimer);
         this.sprite.remove();
     }
+
+    isMousePressed() {
+        return this.sprite.mouse.pressing();
+    }
 }

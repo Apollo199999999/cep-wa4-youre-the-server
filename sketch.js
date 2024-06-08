@@ -24,7 +24,7 @@ let roomsCollection;
 let validRoomCodes = ["19283", "58124", "92641", "38201", "10358", "72912"];
 
 // iframe to display toolbar
-let toolbarFrame;
+let toolbarFrame, toolbarDocument;
 
 function preload() {
 	// Preload resources
@@ -64,11 +64,14 @@ function setup() {
 	toolbarFrame = createElement('iframe').size(width - width * 0.06 - newClientsCollection.w - roomsCollection.w, height);
 	toolbarFrame.attribute('frameBorder', '0');
 	toolbarFrame.attribute('src', './ui/toolbar.html');
-	toolbarFrame.position((document.documentElement.clientWidth - width) / 2 + width * 0.06 + newClientsCollection.w + roomsCollection.w, 0);
+	toolbarFrame.position((document.documentElement.clientWidth - width) / 2 + width * 0.06 + newClientsCollection.w + roomsCollection.w, (document.documentElement.clientHeight - height) / 2);
 }
 
 function draw() {
 	background('#202020');
+
+	// Assign toolbar frame document
+	toolbarDocument = toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
 
 	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true) {
 		// Add a new client
@@ -84,6 +87,31 @@ function draw() {
 				interNormal);
 
 		newClientsCollection.push(newClient);
+	}
+}
+
+// Mouse press event handler
+function mousePressed() {
+	// Check which sprite is being clicked
+	if (newClientsCollection.isChildMousePressed()) {
+		toolbarShowNewClientActions(toolbarDocument);
+	}
+	else {
+		// Manually check if any of the clients in the rooms are being clicked
+		for (let i = 0; i < roomsCollection.childArr.length; i++) {
+			if (roomsCollection.childArr[i].isChildMousePressed() == true) {
+				toolbarShowAddedClientActions(toolbarDocument);
+				return;
+			}
+		}
+	}
+	
+	if (roomsCollection.isChildMousePressed()) {
+		toolbarShowRoomActions(toolbarDocument);
+	}
+	else if (roomsCollection.isCollectionMousePressed()) {
+		// Check room collection last because we are relying on mouseX and mouseY to do so
+		toolbarShowRoomCollectionActions(toolbarDocument);
 	}
 }
 

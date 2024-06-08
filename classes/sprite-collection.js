@@ -34,8 +34,9 @@ class SpriteCollection {
         this.backgroundSprite = new Sprite();
         this.backgroundSprite.pos.x = this.x + this.bgWidth / 2;
         this.backgroundSprite.pos.y = this.y + this.bgHeight / 2;
-        this.backgroundSprite.collider = "none";
-        this.backgroundSprite.layer = -999;
+        this.backgroundSprite.collider = 'static';
+        this.backgroundSprite.overlaps(allSprites);
+        //this.backgroundSprite.layer = -999;
         this.backgroundSprite.draw = () => {
             push();
             let rectW = this.bgWidth;
@@ -132,5 +133,20 @@ class SpriteCollection {
     removeAllSprites() {
         this.childGridView.removeAll();
         this.backgroundSprite.remove();
+    }
+
+    isCollectionMousePressed() {
+        // For some reason, checking mouse press on the backgroundSprite doesn't work directly, so we have to use mouseX and mouseY
+        return mouseX > this.x && mouseY > this.y && mouseX < this.x + this.w && mouseY < this.y + this.h && mouse.pressing();
+    }
+
+    isChildMousePressed() {
+        for (let i = 0; i < this.childArr.length; i++) {
+            if (this.childArr[i].isMousePressed() == true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
