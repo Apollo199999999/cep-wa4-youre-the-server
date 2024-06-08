@@ -57,4 +57,5 @@ function addRoomBtnClicked() {
 
     // Add new room by calling the function from window.parent
     window.parent.addNewRoom(frameDocument.getElementById("room-code-input").value);
+    frameDocument.getElementById("room-code-input").value = "";
 }
