@@ -12,9 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-    <!-- client backend -->
-    <script src="./toolbar.js"></script>
 </head>
 
 <body>
@@ -26,8 +23,9 @@
         <h1 class="text-xl font-bold mt-4">Actions</h1>
 
         <div id="room-collection-actions" class="mt-2 hidden">
-            <input type="text" placeholder="Enter Room Code" class="input input-bordered input-primary w-full" />
-            <button class="btn btn-primary w-full mt-2">Add new room</button>
+            <input id="room-code-input" type="text" placeholder="Enter Room Code"
+                class="input input-bordered input-primary w-full" />
+            <button class="btn btn-primary w-full mt-2" onclick="addRoomBtnClicked()">Add new room</button>
         </div>
 
         <div id="room-actions" class="mt-2 hidden">
@@ -75,5 +73,8 @@
         color: white !important;
     }
 </style>
+
+<!-- client backend -->
+<script src="./toolbar.js"></script>
 
 </html>

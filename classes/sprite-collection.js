@@ -36,7 +36,6 @@ class SpriteCollection {
         this.backgroundSprite.pos.y = this.y + this.bgHeight / 2;
         this.backgroundSprite.collider = 'static';
         this.backgroundSprite.overlaps(allSprites);
-        //this.backgroundSprite.layer = -999;
         this.backgroundSprite.draw = () => {
             push();
             let rectW = this.bgWidth;
@@ -107,10 +106,30 @@ class SpriteCollection {
         for (let i = 0; i < this.childArr.length; i++) {
             // The child arr stores new childs at the back, however, in the array of tiles created, the first tile created is the top left most tile,
             // and since we are adding new childs from the top, we must account for this in our array indices
-            let currSprite = this.childGridView[this.childGridView.length - 1 - i];
-            let newSprite = this.childArr[i].sprite;
-            newSprite.position.x = currSprite.position.x;
-            newSprite.position.y = currSprite.position.y;
+
+            // We need to have different code if we are adding Client vs SpriteCollection
+            let currSprite;
+            let newSprite;
+
+            if (this.childArr[i] instanceof Client) {
+                currSprite = this.childGridView[this.childGridView.length - 1 - i];
+                newSprite = this.childArr[i].sprite;
+                newSprite.position.x = currSprite.position.x;
+                newSprite.position.y = currSprite.position.y;
+            }
+            else if (this.childArr[i] instanceof SpriteCollection) {
+                currSprite = this.childGridView[this.childGridView.length - 1 - i];
+                newSprite = this.childArr[i].backgroundSprite;
+                newSprite.position.x = currSprite.position.x;
+                newSprite.position.y = currSprite.position.y;
+
+                // Update sprite collection
+                this.childArr[i].x = currSprite.position.x - this.childArr[i].w / 2;
+                this.childArr[i].y = currSprite.position.y - this.childArr[i].h / 2;
+                this.childArr[i].childGridView.removeAll();
+                this.childArr[i].empty();
+                this.childArr[i].update();
+            }
 
             // Replace the sprite in-place
             this.childGridView[this.childGridView.length - 1 - i] = newSprite;
@@ -142,7 +161,10 @@ class SpriteCollection {
 
     isChildMousePressed() {
         for (let i = 0; i < this.childArr.length; i++) {
-            if (this.childArr[i].isMousePressed() == true) {
+            if (this.childArr[i] instanceof Client && this.childArr[i].isMousePressed() == true) {
+                return true;
+            }
+            else if (this.childArr[i] instanceof SpriteCollection && this.childArr[i].isCollectionMousePressed() == true) {
                 return true;
             }
         }

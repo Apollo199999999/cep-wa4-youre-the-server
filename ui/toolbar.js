@@ -49,3 +49,12 @@ function toolbarShowAddedClientActions(frameDocument) {
     newClientActionsDiv.style.display = "none";
     addedClientActionsDiv.style.display = "block";
 }
+
+// Event handlers
+function addRoomBtnClicked() {
+    // Get the document of this iframe
+    let frameDocument = window.parent.getToolBarFrameDocument();
+
+    // Add new room by calling the function from window.parent
+    window.parent.addNewRoom(frameDocument.getElementById("room-code-input").value);
+}

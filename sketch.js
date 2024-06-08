@@ -94,28 +94,73 @@ function draw() {
 function mousePressed() {
 	// Check which sprite is being clicked
 	if (newClientsCollection.isChildMousePressed()) {
+		// Client in new clients section is being clicked
 		toolbarShowNewClientActions(toolbarDocument);
 	}
 	else {
 		// Manually check if any of the clients in the rooms are being clicked
 		for (let i = 0; i < roomsCollection.childArr.length; i++) {
 			if (roomsCollection.childArr[i].isChildMousePressed() == true) {
+				// Clients in rooms are being clicked
 				toolbarShowAddedClientActions(toolbarDocument);
 				return;
 			}
 		}
 	}
-	
+
 	if (roomsCollection.isChildMousePressed()) {
+		// Rooms are being clicked
 		toolbarShowRoomActions(toolbarDocument);
 	}
 	else if (roomsCollection.isCollectionMousePressed()) {
 		// Check room collection last because we are relying on mouseX and mouseY to do so
+		// Room collection is being clicked
 		toolbarShowRoomCollectionActions(toolbarDocument);
 	}
 }
 
-// Helper functions
+// Function to add new room (called from toolbar.js)
+function addNewRoom(roomCode) {
+	// Check if roomCode is empty
+	if (roomCode == "") {
+		// Show error message using Swal
+		Swal.fire({
+            title: "Empty room code",
+            text: "No room code input into the textbox.",
+            icon: "error"
+          });
+	}
+	else if (roomsCollection.canAddchild() == true) {
+		// Create test client sprite to get dimensions
+		let testClientSprite = new Client("Test",
+			validRoomCodes[Math.floor(random(0, validRoomCodes.length))],
+			null,
+			clientHappyImg,
+			clientIrritatedImg,
+			clientAngryImg,
+			interNormal);
+
+		// Add new room
+		// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
+		let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, 'x', roomCode, interBold);
+		roomsCollection.push(newRoom);
+
+		testClientSprite.remove();
+	}
+	else if (roomsCollection.canAddchild() == false) {
+		Swal.fire({
+            title: "No more space available!",
+            text: "No more space to add another room.",
+            icon: "error"
+          });
+	}
+}
+
+function getToolBarFrameDocument() {
+	return toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
+}
+
+// Function to capitialise first letter of a string (duh)
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
