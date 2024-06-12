@@ -8,6 +8,9 @@ class SpriteCollection {
         this.collectionHeader = collectionHeader;
         this.fontStyle = fontStyle;
 
+        // spriteRemoved property - same as client
+        this.spriteRemoved = false;
+
         // Define arrays to store childs
         this.childArr = [];
 
@@ -26,6 +29,9 @@ class SpriteCollection {
 
         this.tileGap = width * 1 / 6 * 1 / 4 * 1 / 4;
 
+        // stroke property to outline sprite
+        this.stroke = null;
+
         // Create a sprite for the background
         this.bgWidth = this.numCols * this.childSpriteWidth + (this.numCols + 1) * this.tileGap;
         // Include space for text at the top
@@ -38,6 +44,14 @@ class SpriteCollection {
         this.backgroundSprite.overlaps(allSprites);
         this.backgroundSprite.draw = () => {
             push();
+
+            if (this.stroke == null) {
+                noStroke();
+            }
+            else {
+                stroke(this.stroke);
+            }
+
             let rectW = this.bgWidth;
             let rectH = this.bgHeight;
 
@@ -46,6 +60,7 @@ class SpriteCollection {
             rect(0, 0, rectW, rectH);
 
             // Draw header text
+            noStroke();
             fill("white");
             textFont(this.fontStyle);
             textSize(height * 0.035);
@@ -147,7 +162,6 @@ class SpriteCollection {
     }
 
     repositionSprite(x, y) {
-        console.log(x, y);
         // (x,y) is the centre of the sprite
         this.x = x - this.w / 2;
         this.y = y - this.h / 2;
@@ -169,6 +183,7 @@ class SpriteCollection {
     removeAllSprites() {
         this.childGridView.removeAll();
         this.backgroundSprite.remove();
+        this.spriteRemoved = true;
     }
 
     isCollectionMousePressed() {
@@ -200,5 +215,14 @@ class SpriteCollection {
         }
 
         return null;
+    }
+
+    // Function to remove the outline on all children
+    removeStrokeOnChildren() {
+        for (let i = 0; i < this.childArr.length; i++) {
+            if (this.childArr[i] instanceof Client) {
+                //this.childArr[i].sprite.stroke
+            }
+        }
     }
 }

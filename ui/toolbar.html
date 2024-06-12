@@ -18,7 +18,7 @@
     <div id="parent-div" class="p-4">
         <h1 class="text-xl font-bold">Statistics</h1>
         <p class="text-md mt-2">User Satisfaction:</p>
-        <progress class="progress w-56" value="70" max="100"></progress>
+        <progress class="progress w-full" value="70" max="100"></progress>
 
         <h1 class="text-xl font-bold mt-4">Actions</h1>
 
@@ -40,7 +40,7 @@
                 <button class="btn btn-primary w-full mt-2" onclick="addNewClient()">Add client to room</button>
             </div>
 
-            <button class="btn btn-secondary w-full mt-2">Kick Client</button>
+            <button class="btn btn-secondary w-full mt-2" onclick="kickNewClient()">Kick Client</button>
         </div>
 
         <div id="added-client-actions" class="mt-2 hidden">

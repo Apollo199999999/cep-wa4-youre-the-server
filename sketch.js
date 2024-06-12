@@ -92,11 +92,18 @@ function draw() {
 		newClientsCollection.push(newClient);
 	}
 
+	// If an item that was clicked has already been removed, we need to clear the toolbar
+	if (clickedItem != null && clickedItem.spriteRemoved == true) {
+		clickedItem = null;
+		resetToolbar(toolbarDocument);
+	}
+
 }
 
 // Mouse press event handler
 function mousePressed() {
 	clickedItem = null;
+	resetToolbar(toolbarDocument);
 
 	// Check which sprite is being clicked
 	if (newClientsCollection.isChildMousePressed()) {
@@ -171,7 +178,7 @@ function removeClickedRoom() {
 	if (clickedItem != null && clickedItem instanceof SpriteCollection) {
 		// Remove the room from roomsCollection
 		roomsCollection.remove(clickedItem);
-		clickedItem = null;
+		clickedItem.removeAllSprites();
 	}
 }
 
@@ -204,7 +211,10 @@ function addNewClientToRoom(roomCode) {
 
 				roomsCollection.childArr[i].push(newClient);
 				newClientsCollection.remove(clickedItem);
+
+				// Reset toolbar
 				clickedItem = null;
+				resetToolbar(toolbarDocument);
 				break;
 			}
 		}
@@ -215,6 +225,12 @@ function addNewClientToRoom(roomCode) {
 			text: "No room selected to add the new client to",
 			icon: "error"
 		});
+	}
+}
+
+function kickNewClickedClient() {
+	if (clickedItem instanceof Client) {
+		clickedItem.remove();
 	}
 }
 

@@ -1,5 +1,18 @@
+function resetToolbar(frameDocument) {
+     // Hide all divs
+     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
+     let roomActionsDiv = frameDocument.getElementById("room-actions");
+     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
+     let addedClientActionsDiv = frameDocument.getElementById("added-client-actions");
+ 
+     roomCollectionActionsDiv.style.display = "none";
+     roomActionsDiv.style.display = "none";
+     newClientActionsDiv.style.display = "none";
+     addedClientActionsDiv.style.display = "none";
+}
+
 function toolbarShowRoomCollectionActions(frameDocument) {
-    // Hide all other divs except for the one showing the actions that can be performed on room toolbars
+    // Hide all other divs except for the one showing the actions that can be performed on room collection
     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
     let roomActionsDiv = frameDocument.getElementById("room-actions");
     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
@@ -12,7 +25,7 @@ function toolbarShowRoomCollectionActions(frameDocument) {
 }
 
 function toolbarShowRoomActions(frameDocument) {
-    // Hide all other divs except for the one showing the actions that can be performed on room toolbars
+    // Hide all other divs except for the one showing the actions that can be performed on rooms
     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
     let roomActionsDiv = frameDocument.getElementById("room-actions");
     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
@@ -25,7 +38,7 @@ function toolbarShowRoomActions(frameDocument) {
 }
 
 function toolbarShowNewClientActions(frameDocument) {
-    // Hide all other divs except for the one showing the actions that can be performed on room toolbars
+    // Hide all other divs except for the one showing the actions that can be performed on new clients
     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
     let roomActionsDiv = frameDocument.getElementById("room-actions");
     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
@@ -48,7 +61,7 @@ function toolbarShowNewClientActions(frameDocument) {
 }
 
 function toolbarShowAddedClientActions(frameDocument) {
-    // Hide all other divs except for the one showing the actions that can be performed on room toolbars
+    // Hide all other divs except for the one showing the actions that can be performed on added clients
     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
     let roomActionsDiv = frameDocument.getElementById("room-actions");
     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
@@ -82,4 +95,9 @@ function addNewClient() {
     // Get the selected option and add new client
     let roomSelector = frameDocument.getElementById("room-selector");
     window.parent.addNewClientToRoom(roomSelector.value);
+}
+
+function kickNewClient() {
+    // Kick the client
+    window.parent.kickNewClickedClient();
 }

@@ -9,6 +9,12 @@ class Client {
         this.fontStyle = fontStyle;
         this.clientCollection = clientCollection;
 
+        // spriteRemoved property to track whether our sprite has already been removed
+        this.spriteRemoved = false;
+
+        // Stroke property so we can outline the sprite
+        this.stroke = null;
+
         // Clients can be happy, irritated, or angry
         this.clientStates = {
             Happy: 0,
@@ -36,7 +42,13 @@ class Client {
             // Size of sprite should be based on sketch size, so everything scales properly
             let spriteLength = width * 1 / 6 * 1 / 4;
 
-            noStroke();
+            if (this.stroke == null) {
+                noStroke();
+            }
+            else {
+                stroke(this.stroke);
+            }
+
             // Change the fill color based on the client state
             if (this.clientState == this.clientStates.Happy) {
                 fill("#6ccb5f");
@@ -68,6 +80,7 @@ class Client {
 
             // Draw text
             fill("black");
+            noStroke();
             textFont(this.fontStyle);
             textSize(spriteLength / 5);
             // hacky numbers
@@ -86,8 +99,7 @@ class Client {
                 this.clientState = this.clientStates.Angry;
             }
             else if (this.clientState == this.clientStates.Angry) {
-                this.clientCollection.remove(this);
-                clearInterval(this.clientTimer);
+                this.remove();
             }
         }
 
@@ -104,7 +116,13 @@ class Client {
         if (this.clientTimer != null) {
             clearInterval(this.clientTimer);
         }
+
+        if (this.clientCollection != null) {
+            this.clientCollection.remove(this);
+        }
+
         this.sprite.remove();
+        this.spriteRemoved = true;
     }
 
     isMousePressed() {
