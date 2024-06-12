@@ -46,6 +46,7 @@ class Client {
                 noStroke();
             }
             else {
+                strokeWeight(2);
                 stroke(this.stroke);
             }
 

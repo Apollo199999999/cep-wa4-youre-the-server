@@ -102,8 +102,11 @@ function draw() {
 
 // Mouse press event handler
 function mousePressed() {
+	// Reset stuff first
 	clickedItem = null;
 	resetToolbar(toolbarDocument);
+	newClientsCollection.removeAllStroke();
+	roomsCollection.removeAllStroke();
 
 	// Check which sprite is being clicked
 	if (newClientsCollection.isChildMousePressed()) {
@@ -134,6 +137,9 @@ function mousePressed() {
 		clickedItem = roomsCollection;
 		toolbarShowRoomCollectionActions(toolbarDocument);
 	}
+
+	// Set the stroke colour of the clicked item to indicate it is being clicked
+	clickedItem.stroke = "#0078d4";
 }
 
 // Function to add new room (called from toolbar.js)

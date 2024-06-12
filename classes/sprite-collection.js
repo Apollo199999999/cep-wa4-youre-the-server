@@ -49,6 +49,7 @@ class SpriteCollection {
                 noStroke();
             }
             else {
+                strokeWeight(2);
                 stroke(this.stroke);
             }
 
@@ -218,10 +219,14 @@ class SpriteCollection {
     }
 
     // Function to remove the outline on all children
-    removeStrokeOnChildren() {
+    removeAllStroke() {
+        this.stroke = null;
         for (let i = 0; i < this.childArr.length; i++) {
             if (this.childArr[i] instanceof Client) {
-                //this.childArr[i].sprite.stroke
+                this.childArr[i].stroke = null;
+            }
+            else if (this.childArr[i] instanceof SpriteCollection) {
+                this.childArr[i].removeAllStroke();
             }
         }
     }
