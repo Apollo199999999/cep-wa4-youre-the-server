@@ -82,7 +82,7 @@ class SpriteCollection {
     }
 
     push(child) {
-        if (this.childArr.length < this.childGridView.length) {
+        if (this.canAddchild()) {
             // Push a child to the array
             this.childArr.push(child);
 
@@ -116,19 +116,16 @@ class SpriteCollection {
                 newSprite = this.childArr[i].sprite;
                 newSprite.position.x = currSprite.position.x;
                 newSprite.position.y = currSprite.position.y;
+
+                // Update client
+                this.childArr[i].clientCollection = this;
             }
             else if (this.childArr[i] instanceof SpriteCollection) {
                 currSprite = this.childGridView[this.childGridView.length - 1 - i];
+                this.childArr[i].repositionSprite(currSprite.position.x, currSprite.position.y);
+                // Assign the bgSprite of the child as newSprite, so this.childGridView will still be accurate in reflecting 
+                // the total number of sprites this spriteCollection can hold
                 newSprite = this.childArr[i].backgroundSprite;
-                newSprite.position.x = currSprite.position.x;
-                newSprite.position.y = currSprite.position.y;
-
-                // Update sprite collection
-                this.childArr[i].x = currSprite.position.x - this.childArr[i].w / 2;
-                this.childArr[i].y = currSprite.position.y - this.childArr[i].h / 2;
-                this.childArr[i].childGridView.removeAll();
-                this.childArr[i].empty();
-                this.childArr[i].update();
             }
 
             // Replace the sprite in-place
@@ -147,6 +144,26 @@ class SpriteCollection {
             this.childSpriteWidth + this.tileGap,
             this.childSpriteHeight + this.tileGap
         );
+    }
+
+    repositionSprite(x, y) {
+        console.log(x, y);
+        // (x,y) is the centre of the sprite
+        this.x = x - this.w / 2;
+        this.y = y - this.h / 2;
+
+        // We need to shift all sprites in the childGridView to the new position
+        let dx = x - this.backgroundSprite.position.x;
+        let dy = y - this.backgroundSprite.position.y;
+
+        // Shift position of all sprites
+        this.backgroundSprite.position.x = x;
+        this.backgroundSprite.position.y = y;
+
+        for (let i = 0; i < this.childGridView.length; i++) {
+            this.childGridView[i].position.x += dx;
+            this.childGridView[i].position.y += dy;
+        }
     }
 
     removeAllSprites() {
@@ -170,5 +187,18 @@ class SpriteCollection {
         }
 
         return false;
+    }
+
+    getClickedChild() {
+        for (let i = 0; i < this.childArr.length; i++) {
+            if (this.childArr[i] instanceof Client && this.childArr[i].isMousePressed() == true) {
+                return this.childArr[i];
+            }
+            else if (this.childArr[i] instanceof SpriteCollection && this.childArr[i].isCollectionMousePressed() == true) {
+                return this.childArr[i];
+            }
+        }
+
+        return null;
     }
 }

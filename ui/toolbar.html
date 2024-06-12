@@ -29,15 +29,15 @@
         </div>
 
         <div id="room-actions" class="mt-2 hidden">
-            <button class="btn btn-primary w-full">Delete room</button>
+            <button class="btn btn-primary w-full" onclick="deleteRoomBtnClicked()">Delete room</button>
         </div>
 
         <div id="new-client-actions" class="mt-2 hidden">
             <div>
-                <select class="select select-primary w-full">
+                <select id="room-selector" class="select select-primary w-full">
                     <option selected>Select a room</option>
                 </select>
-                <button class="btn btn-primary w-full mt-2">Add client to room</button>
+                <button class="btn btn-primary w-full mt-2" onclick="addNewClient()">Add client to room</button>
             </div>
 
             <button class="btn btn-secondary w-full mt-2">Kick Client</button>

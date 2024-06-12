@@ -1,5 +1,5 @@
 class Client {
-    constructor(clientName, clientRoomCode, clientCollection, happyImg, irritatedImg, angryImg, fontStyle) {
+    constructor(clientName, clientRoomCode, clientCollection, happyImg, irritatedImg, angryImg, fontStyle, isNewClient) {
         // Assign args to variables
         this.username = clientName;
         this.roomCode = clientRoomCode;
@@ -27,14 +27,14 @@ class Client {
         // the x y of the position of the sprite now takes the center of the sprite as reference
 
         // Size of sprite should be based on sketch size, so everything scales properly
-        this.w = width * 1/6 * 1/4;
-        this.h = width * 1/6 * 1/4;
-        
+        this.w = width * 1 / 6 * 1 / 4;
+        this.h = width * 1 / 6 * 1 / 4;
+
         this.sprite.draw = () => {
             push();
 
             // Size of sprite should be based on sketch size, so everything scales properly
-            let spriteLength = width * 1/6 * 1/4;
+            let spriteLength = width * 1 / 6 * 1 / 4;
 
             noStroke();
             // Change the fill color based on the client state
@@ -47,7 +47,7 @@ class Client {
             else if (this.clientState == this.clientStates.Angry) {
                 fill("#ff99a4");
             }
-            
+
             rect(0, 0, spriteLength, spriteLength);
 
             // Draw an emoticon depending on the client state
@@ -78,23 +78,32 @@ class Client {
             pop();
         }
 
-        // Start a timer to update client state
-        this.clientTimer = setInterval(() => {
+        this.changeStateFunction = () => {
             if (this.clientState == this.clientStates.Happy) {
                 this.clientState = this.clientStates.Irritated;
             }
             else if (this.clientState == this.clientStates.Irritated) {
                 this.clientState = this.clientStates.Angry;
             }
-            else if(this.clientState == this.clientStates.Angry) {
+            else if (this.clientState == this.clientStates.Angry) {
                 this.clientCollection.remove(this);
                 clearInterval(this.clientTimer);
             }
-        }, 5000);
+        }
+
+        // Start a timer to update client state, if applicable
+        this.clientTimer = null;
+        if (isNewClient == true) {
+            this.clientTimer = setInterval(() => {
+                this.changeStateFunction();
+            }, 5000);
+        }
     }
 
     remove() {
-        clearInterval(this.clientTimer);
+        if (this.clientTimer != null) {
+            clearInterval(this.clientTimer);
+        }
         this.sprite.remove();
     }
 

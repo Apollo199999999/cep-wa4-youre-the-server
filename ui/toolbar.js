@@ -35,6 +35,16 @@ function toolbarShowNewClientActions(frameDocument) {
     roomActionsDiv.style.display = "none";
     newClientActionsDiv.style.display = "block";
     addedClientActionsDiv.style.display = "none";
+
+    // Get a list of all available room codes
+    let roomCodes = window.parent.getAllRooms();
+    let roomSelector = frameDocument.getElementById("room-selector");
+    roomSelector.options.length = 0;
+    roomSelector.add(new Option("Select a room", null, true));
+
+    for (let i = 0; i < roomCodes.length; i++) {
+        roomSelector.add(new Option("Room " + roomCodes[i], roomCodes[i], false))
+    }
 }
 
 function toolbarShowAddedClientActions(frameDocument) {
@@ -58,4 +68,18 @@ function addRoomBtnClicked() {
     // Add new room by calling the function from window.parent
     window.parent.addNewRoom(frameDocument.getElementById("room-code-input").value);
     frameDocument.getElementById("room-code-input").value = "";
+}
+
+function deleteRoomBtnClicked() {
+    // Remove the clicked room
+    window.parent.removeClickedRoom();
+}
+
+function addNewClient() {
+    // Get the document of this iframe
+    let frameDocument = window.parent.getToolBarFrameDocument();
+
+    // Get the selected option and add new client
+    let roomSelector = frameDocument.getElementById("room-selector");
+    window.parent.addNewClientToRoom(roomSelector.value);
 }

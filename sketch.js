@@ -26,6 +26,9 @@ let validRoomCodes = ["19283", "58124", "92641", "38201", "10358", "72912"];
 // iframe to display toolbar
 let toolbarFrame, toolbarDocument;
 
+// Variable that stores the current item that is being clicked
+let clickedItem = null
+
 function preload() {
 	// Preload resources
 	clientHappyImg = loadImage("../images/client/happy.png");
@@ -84,17 +87,21 @@ function draw() {
 				clientHappyImg,
 				clientIrritatedImg,
 				clientAngryImg,
-				interNormal);
+				interNormal, true);
 
 		newClientsCollection.push(newClient);
 	}
+
 }
 
 // Mouse press event handler
 function mousePressed() {
+	clickedItem = null;
+
 	// Check which sprite is being clicked
 	if (newClientsCollection.isChildMousePressed()) {
 		// Client in new clients section is being clicked
+		clickedItem = newClientsCollection.getClickedChild();
 		toolbarShowNewClientActions(toolbarDocument);
 	}
 	else {
@@ -102,6 +109,7 @@ function mousePressed() {
 		for (let i = 0; i < roomsCollection.childArr.length; i++) {
 			if (roomsCollection.childArr[i].isChildMousePressed() == true) {
 				// Clients in rooms are being clicked
+				clickedItem = roomsCollection.childArr[i].getClickedChild();
 				toolbarShowAddedClientActions(toolbarDocument);
 				return;
 			}
@@ -110,11 +118,13 @@ function mousePressed() {
 
 	if (roomsCollection.isChildMousePressed()) {
 		// Rooms are being clicked
+		clickedItem = roomsCollection.getClickedChild();
 		toolbarShowRoomActions(toolbarDocument);
 	}
 	else if (roomsCollection.isCollectionMousePressed()) {
 		// Check room collection last because we are relying on mouseX and mouseY to do so
 		// Room collection is being clicked
+		clickedItem = roomsCollection;
 		toolbarShowRoomCollectionActions(toolbarDocument);
 	}
 }
@@ -125,10 +135,10 @@ function addNewRoom(roomCode) {
 	if (roomCode == "") {
 		// Show error message using Swal
 		Swal.fire({
-            title: "Empty room code",
-            text: "No room code input into the textbox.",
-            icon: "error"
-          });
+			title: "Empty room code",
+			text: "No room code input into the textbox.",
+			icon: "error"
+		});
 	}
 	else if (roomsCollection.canAddchild() == true) {
 		// Create test client sprite to get dimensions
@@ -149,10 +159,62 @@ function addNewRoom(roomCode) {
 	}
 	else if (roomsCollection.canAddchild() == false) {
 		Swal.fire({
-            title: "No more space available!",
-            text: "No more space to add another room.",
-            icon: "error"
-          });
+			title: "No more space available!",
+			text: "No more space to add another room.",
+			icon: "error"
+		});
+	}
+}
+
+// Function to remove clicked room (called from toolbar.js)
+function removeClickedRoom() {
+	if (clickedItem != null && clickedItem instanceof SpriteCollection) {
+		// Remove the room from roomsCollection
+		roomsCollection.remove(clickedItem);
+		clickedItem = null;
+	}
+}
+
+// Function to get all available rooms (called from toolbar.js)
+function getAllRooms() {
+	// Iterate through the array of rooms in roomsCollection, then use the collectionHeader property of each room to get the room code
+	let roomCodes = [];
+
+	for (let i = 0; i < roomsCollection.childArr.length; i++) {
+		roomCodes.push(roomsCollection.childArr[i].collectionHeader);
+	}
+
+	return roomCodes;
+}
+
+// Function to add the clicked new client to a room (called from toolbar.js)
+function addNewClientToRoom(roomCode) {
+	if (roomCode != null) {
+		for (let i = 0; i < roomsCollection.childArr.length; i++) {
+			if (roomsCollection.childArr[i].collectionHeader == roomCode && clickedItem instanceof Client) {
+				// Create a new client to push into the room
+				let newClient =
+					new Client(clickedItem.username,
+						clickedItem.roomCode,
+						roomsCollection.childArr[i],
+						clientHappyImg,
+						clientIrritatedImg,
+						clientAngryImg,
+						interNormal, false);
+
+				roomsCollection.childArr[i].push(newClient);
+				newClientsCollection.remove(clickedItem);
+				clickedItem = null;
+				break;
+			}
+		}
+	}
+	else {
+		Swal.fire({
+			title: "No room selected!",
+			text: "No room selected to add the new client to",
+			icon: "error"
+		});
 	}
 }
 
