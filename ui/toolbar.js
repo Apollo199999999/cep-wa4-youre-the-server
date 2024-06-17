@@ -1,14 +1,14 @@
 function resetToolbar(frameDocument) {
-     // Hide all divs
-     let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
-     let roomActionsDiv = frameDocument.getElementById("room-actions");
-     let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
-     let addedClientActionsDiv = frameDocument.getElementById("added-client-actions");
- 
-     roomCollectionActionsDiv.style.display = "none";
-     roomActionsDiv.style.display = "none";
-     newClientActionsDiv.style.display = "none";
-     addedClientActionsDiv.style.display = "none";
+    // Hide all divs
+    let roomCollectionActionsDiv = frameDocument.getElementById("room-collection-actions");
+    let roomActionsDiv = frameDocument.getElementById("room-actions");
+    let newClientActionsDiv = frameDocument.getElementById("new-client-actions");
+    let addedClientActionsDiv = frameDocument.getElementById("added-client-actions");
+
+    roomCollectionActionsDiv.style.display = "none";
+    roomActionsDiv.style.display = "none";
+    newClientActionsDiv.style.display = "none";
+    addedClientActionsDiv.style.display = "none";
 }
 
 function toolbarShowRoomCollectionActions(frameDocument) {
@@ -81,6 +81,13 @@ function toolbarShowAddedClientActions(frameDocument) {
     for (let i = 0; i < roomCodes.length; i++) {
         roomSelector.add(new Option("Room " + roomCodes[i], roomCodes[i], false))
     }
+}
+
+function toolbarSetProgressBarValue(frameDocument, value) {
+    // Try-catch in case frameDocument hasn't loaded yet when we call it from sketch.js
+    try {
+        frameDocument.getElementById("user-satisfaction-progress").value = value;
+    } catch { }
 }
 
 // Event handlers

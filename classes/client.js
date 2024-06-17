@@ -119,11 +119,14 @@ class Client {
         this.changeStateFunction = () => {
             if (this.clientState == this.clientStates.Happy) {
                 this.clientState = this.clientStates.Irritated;
+                GV_UserSatisfaction -= 2;
             }
             else if (this.clientState == this.clientStates.Irritated) {
                 this.clientState = this.clientStates.Angry;
+                GV_UserSatisfaction -= 2;
             }
             else if (this.clientState == this.clientStates.Angry) {
+                GV_UserSatisfaction -= 2;
                 this.remove();
             }
         }
@@ -131,9 +134,7 @@ class Client {
         // Start a timer to update client state, if applicable
         this.clientTimer = null;
         if (isNewClient == true) {
-            this.clientTimer = setInterval(() => {
-                this.changeStateFunction();
-            }, 5000);
+            this.startChangeStateTimer();
         }
     }
 
@@ -156,5 +157,11 @@ class Client {
 
     activateBubbleAnimation() {
         this.bubbleAni = true;
+    }
+
+    startChangeStateTimer() {
+        this.clientTimer = setInterval(() => {
+            this.changeStateFunction();
+        }, 5000 - GV_GameLevel * 500);
     }
 }

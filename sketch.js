@@ -6,7 +6,7 @@ const SKETCH_HEIGHT = Math.min(document.documentElement.clientHeight, document.d
 let randomWordClass;
 
 // Client spawning rate
-let clientSpawnRate = 2;
+let clientSpawnRate = 0.25 * GV_GameLevel;
 
 // Declare variables to preload images
 let clientHappyImg, clientIrritatedImg, clientAngryImg, clientAni;
@@ -103,6 +103,8 @@ function draw() {
 		resetToolbar(toolbarDocument);
 	}
 
+	// Update the progress bar in the toolbar
+	toolbarSetProgressBarValue(toolbarDocument, GV_UserSatisfaction);
 }
 
 // Mouse press event handler
@@ -144,8 +146,10 @@ function mousePressed() {
 		toolbarShowRoomCollectionActions(toolbarDocument);
 	}
 
-	// Set the stroke colour of the clicked item to indicate it is being clicked
-	clickedItem.stroke = "#0078d4";
+	if (clickedItem != null) {
+		// Set the stroke colour of the clicked item to indicate it is being clicked
+		clickedItem.stroke = "#0078d4";
+	}
 }
 
 // Function to add new room (called from toolbar.js)
@@ -210,7 +214,7 @@ function getAllRooms() {
 
 // Function to add the clicked new client to a room (called from toolbar.js)
 function addNewClientToRoom(roomCode) {
-	if (roomCode != "null"  && clickedItem instanceof Client && clickedItem.clientCollection.collectionHeader != roomCode) {
+	if (roomCode != "null" && clickedItem instanceof Client && clickedItem.clientCollection.collectionHeader != roomCode) {
 		for (let i = 0; i < roomsCollection.childArr.length; i++) {
 			if (roomsCollection.childArr[i].collectionHeader == roomCode) {
 				// Create a new client to push into the room
@@ -224,6 +228,11 @@ function addNewClientToRoom(roomCode) {
 						interNormal,
 						false,
 						clientAni);
+				
+				// Check if the added client is added to the correct room
+				if (clickedItem.roomCode != roomCode) {
+					newClient.startChangeStateTimer();
+				}
 
 				roomsCollection.childArr[i].push(newClient);
 				clickedItem.remove();
