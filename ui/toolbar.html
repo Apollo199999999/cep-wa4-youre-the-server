@@ -40,11 +40,20 @@
                 <button class="btn btn-primary w-full mt-2" onclick="addNewClient()">Add client to room</button>
             </div>
 
-            <button class="btn btn-secondary w-full mt-2" onclick="kickNewClient()">Kick Client</button>
+            <div class="divider divider-success"></div> 
+
+            <button class="btn btn-error w-full" onclick="kickNewClient()">Kick Client</button>
         </div>
 
         <div id="added-client-actions" class="mt-2 hidden">
             <button class="btn btn-primary w-full">Resolve client requests</button>
+
+            <div class="divider divider-success"></div> 
+
+            <select id="room-selector-existing" class="select select-error w-full">
+                <option selected>Select a room</option>
+            </select>
+            <button class="btn btn-error w-full mt-2" onclick="moveExistingClient()">Move client to room</button>
         </div>
     </div>
 </body>

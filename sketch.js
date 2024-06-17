@@ -210,9 +210,9 @@ function getAllRooms() {
 
 // Function to add the clicked new client to a room (called from toolbar.js)
 function addNewClientToRoom(roomCode) {
-	if (roomCode != null) {
+	if (roomCode != "null"  && clickedItem instanceof Client && clickedItem.clientCollection.collectionHeader != roomCode) {
 		for (let i = 0; i < roomsCollection.childArr.length; i++) {
-			if (roomsCollection.childArr[i].collectionHeader == roomCode && clickedItem instanceof Client) {
+			if (roomsCollection.childArr[i].collectionHeader == roomCode) {
 				// Create a new client to push into the room
 				let newClient =
 					new Client(clickedItem.username,
@@ -226,19 +226,15 @@ function addNewClientToRoom(roomCode) {
 						clientAni);
 
 				roomsCollection.childArr[i].push(newClient);
-				newClientsCollection.remove(clickedItem);
-				newClient.activateBubbleAnimation();
-				// Reset toolbar
-				clickedItem = null;
-				resetToolbar(toolbarDocument);
+				clickedItem.remove();
 				break;
 			}
 		}
 	}
-	else {
+	else if (roomCode == "null") {
 		Swal.fire({
 			title: "No room selected!",
-			text: "No room selected to add the new client to",
+			text: "No room selected in the dropdown.",
 			icon: "error"
 		});
 	}
