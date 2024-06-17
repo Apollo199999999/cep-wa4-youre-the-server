@@ -25,6 +25,7 @@ class SpriteCollection {
         this.childPlaceholder.tile = tileChar;
         this.childPlaceholder.collider = 'static';
         this.childPlaceholder.overlaps(allSprites);
+        this.childPlaceholder.layer = -1;
         this.childPlaceholder.color = "#2b2b2b";
 
         this.tileGap = width * 1 / 6 * 1 / 4 * 1 / 4;
@@ -42,6 +43,7 @@ class SpriteCollection {
         this.backgroundSprite.pos.y = this.y + this.bgHeight / 2;
         this.backgroundSprite.collider = 'static';
         this.backgroundSprite.overlaps(allSprites);
+        this.backgroundSprite.layer = -1;
         this.backgroundSprite.draw = () => {
             push();
 

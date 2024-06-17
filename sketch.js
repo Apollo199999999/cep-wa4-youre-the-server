@@ -9,7 +9,7 @@ let randomWordClass;
 let clientSpawnRate = 2;
 
 // Declare variables to preload images
-let clientHappyImg, clientIrritatedImg, clientAngryImg;
+let clientHappyImg, clientIrritatedImg, clientAngryImg, clientAni;
 
 // Declare font variables
 let interLight, interNormal, interBold;
@@ -31,13 +31,14 @@ let clickedItem = null
 
 function preload() {
 	// Preload resources
-	clientHappyImg = loadImage("../images/client/happy.png");
-	clientIrritatedImg = loadImage("../images/client/irritated.png");
-	clientAngryImg = loadImage("../images/client/angry.png");
+	clientHappyImg = loadImage("./images/client/happy.png");
+	clientIrritatedImg = loadImage("./images/client/irritated.png");
+	clientAngryImg = loadImage("./images/client/angry.png");
+	clientAni = loadImage("./images/client/bubbleAnimation.png")
 
-	interLight = loadFont("../resources/Inter-Thin.ttf");
-	interNormal = loadFont("../resources/Inter-Regular.ttf");
-	interBold = loadFont("../resources/Inter-Bold.ttf");
+	interLight = loadFont("./resources/fonts/Inter-Thin.ttf");
+	interNormal = loadFont("./resources/fonts/Inter-Regular.ttf");
+	interBold = loadFont("./resources/fonts/Inter-Bold.ttf");
 }
 
 function setup() {
@@ -52,7 +53,9 @@ function setup() {
 		clientHappyImg,
 		clientIrritatedImg,
 		clientAngryImg,
-		interNormal);
+		interNormal,
+		true,
+		clientAni);
 
 	// Area where new clients are spawned
 	newClientsCollection = new SpriteCollection(width * 0.02, height * 0.02, 9, 3, testClientSprite.w, testClientSprite.h, '=', "New clients", interBold);
@@ -87,7 +90,9 @@ function draw() {
 				clientHappyImg,
 				clientIrritatedImg,
 				clientAngryImg,
-				interNormal, true);
+				interNormal,
+				true,
+				clientAni);
 
 		newClientsCollection.push(newClient);
 	}
@@ -121,6 +126,7 @@ function mousePressed() {
 				// Clients in rooms are being clicked
 				clickedItem = roomsCollection.childArr[i].getClickedChild();
 				toolbarShowAddedClientActions(toolbarDocument);
+				clickedItem.stroke = "#0078d4";
 				return;
 			}
 		}
@@ -161,7 +167,9 @@ function addNewRoom(roomCode) {
 			clientHappyImg,
 			clientIrritatedImg,
 			clientAngryImg,
-			interNormal);
+			interNormal,
+			true,
+			clientAni);
 
 		// Add new room
 		// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
@@ -213,11 +221,13 @@ function addNewClientToRoom(roomCode) {
 						clientHappyImg,
 						clientIrritatedImg,
 						clientAngryImg,
-						interNormal, false);
+						interNormal,
+						false,
+						clientAni);
 
 				roomsCollection.childArr[i].push(newClient);
 				newClientsCollection.remove(clickedItem);
-
+				newClient.activateBubbleAnimation();
 				// Reset toolbar
 				clickedItem = null;
 				resetToolbar(toolbarDocument);

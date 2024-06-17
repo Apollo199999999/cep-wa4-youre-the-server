@@ -1,5 +1,5 @@
 class Client {
-    constructor(clientName, clientRoomCode, clientCollection, happyImg, irritatedImg, angryImg, fontStyle, isNewClient) {
+    constructor(clientName, clientRoomCode, clientCollection, happyImg, irritatedImg, angryImg, fontStyle, isNewClient, clientAni) {
         // Assign args to variables
         this.username = clientName;
         this.roomCode = clientRoomCode;
@@ -8,6 +8,7 @@ class Client {
         this.angryImg = angryImg;
         this.fontStyle = fontStyle;
         this.clientCollection = clientCollection;
+        this.clientAni = clientAni;
 
         // spriteRemoved property to track whether our sprite has already been removed
         this.spriteRemoved = false;
@@ -27,14 +28,27 @@ class Client {
 
         // Create a sprite for each "client" in the game
         this.sprite = new Sprite();
+        this.sprite.layer = 1;
         this.sprite.collider = 'static';
         this.sprite.overlaps(allSprites);
+        this.sprite.visible = true;
+
         // Note that because we are overriding the sprite's draw function,
         // the x y of the position of the sprite now takes the center of the sprite as reference
 
         // Size of sprite should be based on sketch size, so everything scales properly
         this.w = width * 1 / 6 * 1 / 4;
         this.h = width * 1 / 6 * 1 / 4;
+
+        // Variable to control whether to show the "..." animation
+        this.bubbleAni = false;
+
+        // Configure animation and draw function
+        this.sprite.spriteSheet = this.clientAni;
+        this.sprite.anis.frameDelay = 10;
+        this.sprite.addAnis({
+            bubble: { row: 0, frames: 3, w: 337, h: 200 }
+        });
 
         this.sprite.draw = () => {
             push();
@@ -90,7 +104,17 @@ class Client {
             text(this.roomCode, (-spriteLength / 2) + spriteLength / 11, imgY + imgH + spriteLength / 3);
 
             pop();
+
+            // Draw "..." animation if applicable
+            if (this.bubbleAni == true) {
+                // hacky numbers pt2
+                this.sprite.ani.draw(this.w * 3 / 4, -this.h / 2, 0, this.h / 300, this.h / 300);
+            }
         }
+
+        this.sprite.width = this.w;
+        this.sprite.height = this.h;
+        this.sprite.changeAni('bubble');
 
         this.changeStateFunction = () => {
             if (this.clientState == this.clientStates.Happy) {
@@ -128,5 +152,9 @@ class Client {
 
     isMousePressed() {
         return this.sprite.mouse.pressing();
+    }
+
+    activateBubbleAnimation() {
+        this.bubbleAni = true;
     }
 }
