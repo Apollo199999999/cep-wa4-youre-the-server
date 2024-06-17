@@ -233,6 +233,9 @@ function addNewClientToRoom(roomCode) {
 				if (clickedItem.roomCode != roomCode) {
 					newClient.startChangeStateTimer();
 				}
+				else {
+					GV_UserSatisfaction += (3 - clickedItem.clientState);
+				}
 
 				roomsCollection.childArr[i].push(newClient);
 				clickedItem.remove();
