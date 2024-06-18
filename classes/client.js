@@ -40,8 +40,8 @@ class Client {
         this.w = width * 1 / 6 * 1 / 4;
         this.h = width * 1 / 6 * 1 / 4;
 
-        // Variable to control whether to show the "..." animation
-        this.bubbleAni = false;
+        // Variable to control whether to show the "..." animation/whether a client has a request
+        this.hasRequest = false;
 
         // Configure animation and draw function
         this.sprite.spriteSheet = this.clientAni;
@@ -106,9 +106,9 @@ class Client {
             pop();
 
             // Draw "..." animation if applicable
-            if (this.bubbleAni == true) {
+            if (this.hasRequest == true) {
                 // hacky numbers pt2
-                this.sprite.ani.draw(this.w * 3 / 4, -this.h / 2, 0, this.h / 300, this.h / 300);
+                this.sprite.ani.draw(this.w * 2 / 4, -this.h / 2.7, 0, this.h / 300, this.h / 300);
             }
         }
 
@@ -133,8 +133,12 @@ class Client {
 
         // Start a timer to update client state, if applicable
         this.clientTimer = null;
+        this.roomTimer = null;
         if (isNewClient == true) {
             this.startChangeStateTimer();
+        }
+        else {
+            this.startRoomTimer();
         }
     }
 
@@ -155,13 +159,26 @@ class Client {
         return this.sprite.mouse.pressing();
     }
 
-    activateBubbleAnimation() {
-        this.bubbleAni = true;
-    }
-
     startChangeStateTimer() {
         this.clientTimer = setInterval(() => {
             this.changeStateFunction();
-        }, 5000 - GV_GameLevel * 500);
+        }, 5500 - GV_GameLevel * 100);
+    }
+
+    startRoomTimer() {
+        this.roomTimer = setInterval(() => {
+            this.generateRequest()
+        }, 4000);
+    }
+
+    generateRequest() {
+        if (GV_NewClientsRemaining <= 0.1 * 17 * GV_GameLevel && this.hasRequest == false){
+            // Probability of generating request depends on game level
+            let probability = Math.random();
+            if (probability < Math.min(0.1 + 0.1 * GV_GameLevel, 0.5)) {
+                this.hasRequest = true;
+                this.startChangeStateTimer();
+            }
+        }
     }
 }

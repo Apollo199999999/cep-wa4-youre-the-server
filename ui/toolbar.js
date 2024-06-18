@@ -88,7 +88,7 @@ function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level,
     try {
         frameDocument.getElementById("user-satisfaction-progress").value = userSatisfaction;
         frameDocument.getElementById("level-text").innerHTML = "Level: " + level;
-        frameDocument.getElementById("new-clients-remaining-text").innerHTML = "New Clients Remaining: " + clientsRemaining;
+        frameDocument.getElementById("new-clients-remaining-text").innerHTML = "Unspawned Clients Left: " + clientsRemaining;
         frameDocument.getElementById("time-remaining-text").innerHTML = "Time Remaining: " + Math.floor(timeRemaining / 60).toString() + "min " + (timeRemaining - Math.floor(timeRemaining / 60) * 60) + "s";
     } catch { }
 }

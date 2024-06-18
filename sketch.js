@@ -29,9 +29,6 @@ let toolbarFrame, toolbarDocument;
 // Variable that stores the current item that is being clicked
 let clickedItem = null
 
-// New clients remaining to spawn
-let newClientsRemaining = 17 * GV_GameLevel; 
-
 function preload() {
 	// Preload resources
 	clientHappyImg = loadImage("./images/client/happy.png");
@@ -90,7 +87,7 @@ function draw() {
 	toolbarDocument = toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
 
 	// Whether to spawn new clients
-	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true && newClientsRemaining > 0) {
+	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true && GV_NewClientsRemaining > 0) {
 		// Add a new client
 		// Username should be max 6 chars long
 		let username = capitalizeFirstLetter(randomWordClass.generateWordWithMaxLength(4)) + Math.floor(random(10, 100));
@@ -106,7 +103,7 @@ function draw() {
 				clientAni);
 
 		newClientsCollection.push(newClient);
-		newClientsRemaining -= 1;
+		GV_NewClientsRemaining -= 1;
 	}
 
 	// If an item that was clicked has already been removed, we need to clear the toolbar
@@ -116,7 +113,7 @@ function draw() {
 	}
 
 	// Update the toolbar
-	updateToolbar(toolbarDocument, GV_UserSatisfaction, newClientsRemaining, GV_GameLevel, GV_LevelTimeRemaining);
+	updateToolbar(toolbarDocument, GV_UserSatisfaction, GV_NewClientsRemaining, GV_GameLevel, GV_LevelTimeRemaining);
 
 	// Trigger gameover if applicable
 	if (GV_UserSatisfaction <= 0) {
@@ -138,7 +135,7 @@ function draw() {
 		GV_GameLevel = 2;
 		GV_LevelTimeRemaining = 4 * 60;
 		clientSpawnRate = 0.25 * GV_GameLevel;
-		newClientsRemaining = 17 * GV_GameLevel;
+		GV_NewClientsRemaining = 17 * GV_GameLevel;
 	}
 }
 
@@ -190,7 +187,7 @@ function mousePressed() {
 // Function to generate random room codes
 function generateValidRoomCodes() {
 	validRoomCodes = [];
-	while (validRoomCodes.length < 5) {
+	while (validRoomCodes.length < 6) {
 		let randomRoomCode = Math.floor(random(10000, 100000)).toString();
 		if (validRoomCodes.includes(randomRoomCode) == false) {
 			validRoomCodes.push(randomRoomCode);
