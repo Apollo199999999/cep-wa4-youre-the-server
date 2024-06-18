@@ -105,6 +105,11 @@ function draw() {
 
 	// Update the progress bar in the toolbar
 	toolbarSetProgressBarValue(toolbarDocument, GV_UserSatisfaction);
+
+	// Trigger gameover if applicable
+	if (GV_UserSatisfaction <= 0) {
+		window.location.href = "gameOver.html";
+	}
 }
 
 // Mouse press event handler
