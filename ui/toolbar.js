@@ -83,10 +83,12 @@ function toolbarShowAddedClientActions(frameDocument) {
     }
 }
 
-function toolbarSetProgressBarValue(frameDocument, value) {
+function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level) {
     // Try-catch in case frameDocument hasn't loaded yet when we call it from sketch.js
     try {
-        frameDocument.getElementById("user-satisfaction-progress").value = value;
+        frameDocument.getElementById("user-satisfaction-progress").value = userSatisfaction;
+        frameDocument.getElementById("level-text").innerHTML = "Level: " + level;
+        frameDocument.getElementById("new-clients-remaining-text").innerHTML = "New Clients Remaining: " + clientsRemaining;
     } catch { }
 }
 

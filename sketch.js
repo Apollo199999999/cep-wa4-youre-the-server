@@ -29,6 +29,9 @@ let toolbarFrame, toolbarDocument;
 // Variable that stores the current item that is being clicked
 let clickedItem = null
 
+// New clients remaining to spawn
+let newClientsRemaining = 17 * GV_GameLevel; 
+
 function preload() {
 	// Preload resources
 	clientHappyImg = loadImage("./images/client/happy.png");
@@ -79,7 +82,8 @@ function draw() {
 	// Assign toolbar frame document
 	toolbarDocument = toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
 
-	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true) {
+	// Whether to spawn new clients
+	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true && newClientsRemaining > 0) {
 		// Add a new client
 		// Username should be max 6 chars long
 		let username = capitalizeFirstLetter(randomWordClass.generateWordWithMaxLength(4)) + Math.floor(random(10, 100));
@@ -95,6 +99,7 @@ function draw() {
 				clientAni);
 
 		newClientsCollection.push(newClient);
+		newClientsRemaining -= 1;
 	}
 
 	// If an item that was clicked has already been removed, we need to clear the toolbar
@@ -103,8 +108,8 @@ function draw() {
 		resetToolbar(toolbarDocument);
 	}
 
-	// Update the progress bar in the toolbar
-	toolbarSetProgressBarValue(toolbarDocument, GV_UserSatisfaction);
+	// Update the toolbar
+	updateToolbar(toolbarDocument, GV_UserSatisfaction, newClientsRemaining, GV_GameLevel);
 
 	// Trigger gameover if applicable
 	if (GV_UserSatisfaction <= 0) {
