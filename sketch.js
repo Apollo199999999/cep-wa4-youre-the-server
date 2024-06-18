@@ -21,7 +21,7 @@ let newClientsCollection;
 let roomsCollection;
 
 // Array of valid room codes that the clients can take (player will create rooms based on these codes)
-let validRoomCodes = ["19283", "58124", "92641", "38201", "10358", "72912"];
+let validRoomCodes = [];
 
 // iframe to display toolbar
 let toolbarFrame, toolbarDocument;
@@ -46,6 +46,7 @@ function preload() {
 
 function setup() {
 	new Canvas(SKETCH_WIDTH, SKETCH_HEIGHT);
+	frameRate(60);
 
 	randomWordClass = new RandomWords();
 
@@ -69,11 +70,17 @@ function setup() {
 	testClientSprite.remove();
 	testRoomSprite.removeAllSprites();
 
+	// Generate room codes
+	generateValidRoomCodes();
+
 	// Create a iframe to display toolbar
 	toolbarFrame = createElement('iframe').size(width - width * 0.06 - newClientsCollection.w - roomsCollection.w, height);
 	toolbarFrame.attribute('frameBorder', '0');
 	toolbarFrame.attribute('src', './ui/toolbar.html');
 	toolbarFrame.position((document.documentElement.clientWidth - width) / 2 + width * 0.06 + newClientsCollection.w + roomsCollection.w, (document.documentElement.clientHeight - height) / 2);
+
+	// Game timer
+	setInterval(() => {GV_LevelTimeRemaining -= 1;}, 1000);
 }
 
 function draw() {
@@ -109,11 +116,29 @@ function draw() {
 	}
 
 	// Update the toolbar
-	updateToolbar(toolbarDocument, GV_UserSatisfaction, newClientsRemaining, GV_GameLevel);
+	updateToolbar(toolbarDocument, GV_UserSatisfaction, newClientsRemaining, GV_GameLevel, GV_LevelTimeRemaining);
 
 	// Trigger gameover if applicable
 	if (GV_UserSatisfaction <= 0) {
 		window.location.href = "gameOver.html";
+	}
+
+	// If no time is remaining, progress to the next level
+	if (GV_LevelTimeRemaining <= 0) {
+		// Remove everything
+		roomsCollection.removeAllSprites();
+		newClientsCollection.removeAllSprites();
+		clickedItem = null;
+		resetToolbar(toolbarDocument);
+
+		// Re-init everything
+		initCollections();
+		generateValidRoomCodes();
+		GV_UserSatisfaction = 100;
+		GV_GameLevel = 2;
+		GV_LevelTimeRemaining = 4 * 60;
+		clientSpawnRate = 0.25 * GV_GameLevel;
+		newClientsRemaining = 17 * GV_GameLevel;
 	}
 }
 
@@ -162,6 +187,40 @@ function mousePressed() {
 	}
 }
 
+// Function to generate random room codes
+function generateValidRoomCodes() {
+	validRoomCodes = [];
+	while (validRoomCodes.length < 5) {
+		let randomRoomCode = Math.floor(random(10000, 100000)).toString();
+		if (validRoomCodes.includes(randomRoomCode) == false) {
+			validRoomCodes.push(randomRoomCode);
+		}
+	}
+}
+
+// Function to init roomsCollection and newClientsCollection
+function initCollections() {
+	// Create test room and client sprites so we can get their width
+	let testClientSprite = new Client("Test",
+		validRoomCodes[Math.floor(random(0, validRoomCodes.length))],
+		null,
+		clientHappyImg,
+		clientIrritatedImg,
+		clientAngryImg,
+		interNormal,
+		true,
+		clientAni);
+
+	// Area where new clients are spawned
+	newClientsCollection = new SpriteCollection(width * 0.02, height * 0.02, 9, 3, testClientSprite.w, testClientSprite.h, '=', "New clients", interBold);
+	let testRoomSprite = new SpriteCollection(width * 0.02, height * 0.02, 3, 3, testClientSprite.w, testClientSprite.h, 'x', "Room", interBold);
+	// Areas where rooms are held
+	roomsCollection = new SpriteCollection(width * 0.04 + newClientsCollection.w, height * 0.02, 2, 3, testRoomSprite.w, testRoomSprite.h, '#', "Rooms", interBold);
+
+	testClientSprite.remove();
+	testRoomSprite.removeAllSprites();
+}
+
 // Function to add new room (called from toolbar.js)
 function addNewRoom(roomCode) {
 	// Check if roomCode is empty
@@ -204,6 +263,9 @@ function addNewRoom(roomCode) {
 // Function to remove clicked room (called from toolbar.js)
 function removeClickedRoom() {
 	if (clickedItem != null && clickedItem instanceof SpriteCollection) {
+		// Tank the user satisfaction
+		GV_UserSatisfaction -= clickedItem.childArr.length;
+		
 		// Remove the room from roomsCollection
 		roomsCollection.remove(clickedItem);
 		clickedItem.removeAllSprites();

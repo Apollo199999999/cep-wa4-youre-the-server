@@ -16,14 +16,35 @@
 
 <body>
     <div id="parent-div" class="p-4">
+        <!-- Metrics section -->
         <h1 class="text-xl font-bold">Metrics</h1>
 
-        <p class="text-md mt-2" id="level-text">Level: </p>
-        <p class="text-md mt-2" id="new-clients-remaining-text">New Clients Remaining: </p>
+        <div class="flex h-full items-center mt-2 opacity-100">
+            <img src="../images/icons/levelIcon.png" class="w-6 h-6 mr-2 opacity-100" />
+            <p class="text-md" id="level-text">Level: </p>
+        </div>
 
-        <p class="text-md mt-2">User Satisfaction:</p>
-        <progress id="user-satisfaction-progress" class="progress progress-primary w-full" max="100"></progress>
+        <div class="flex h-full items-center mt-2 opacity-100">
+            <img src="../images/icons/clientIcon.png" class="w-6 h-6 mr-2 opacity-100" />
+            <p class="text-md" id="new-clients-remaining-text">Unspawned Clients Left: </p>
+        </div>
 
+        <div class="flex h-full items-center mt-2 opacity-100">
+            <img src="../images/icons/clockIcon.png" class="w-6 h-6 mr-2 opacity-100" />
+            <p class="text-md" id="time-remaining-text">Time Remaining: </p>
+        </div>
+
+        <div class="flex h-full w-full mt-2 opacity-100">
+            <img src="../images/icons/satisfactionIcon.png" class="w-6 h-6 mr-2 opacity-100" />
+            <div class="w-full">
+                <p class="text-md">User Satisfaction:</p>
+                <progress id="user-satisfaction-progress" class="progress progress-primary w-full" max="100"></progress>
+            </div>
+            
+        </div>
+       
+
+        <!-- Actions section -->
         <h1 class="text-xl font-bold mt-4">Actions</h1>
 
         <div id="room-collection-actions" class="mt-2 hidden">

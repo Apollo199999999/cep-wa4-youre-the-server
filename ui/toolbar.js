@@ -83,12 +83,13 @@ function toolbarShowAddedClientActions(frameDocument) {
     }
 }
 
-function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level) {
+function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level, timeRemaining) {
     // Try-catch in case frameDocument hasn't loaded yet when we call it from sketch.js
     try {
         frameDocument.getElementById("user-satisfaction-progress").value = userSatisfaction;
         frameDocument.getElementById("level-text").innerHTML = "Level: " + level;
         frameDocument.getElementById("new-clients-remaining-text").innerHTML = "New Clients Remaining: " + clientsRemaining;
+        frameDocument.getElementById("time-remaining-text").innerHTML = "Time Remaining: " + Math.floor(timeRemaining / 60).toString() + "min " + (timeRemaining - Math.floor(timeRemaining / 60) * 60) + "s";
     } catch { }
 }
 

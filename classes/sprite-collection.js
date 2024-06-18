@@ -184,7 +184,22 @@ class SpriteCollection {
     }
 
     removeAllSprites() {
-        this.childGridView.removeAll();
+        // Iterate through children, marking them all as removed
+        for (let i = 0; i < this.childArr.length; i++) {
+            if (this.childArr[i] instanceof Client) {
+                this.childArr[i].remove();
+            }
+            else if (this.childArr[i] instanceof SpriteCollection) {
+                this.childArr[i].removeAllSprites();
+            }
+        }
+
+        for (let i = 0; i < this.childGridView.length; i++) {
+            if (this.childGridView[i].removed == false) {
+                this.childGridView[i].remove();
+            }
+        }
+        
         this.backgroundSprite.remove();
         this.spriteRemoved = true;
     }
