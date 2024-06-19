@@ -130,3 +130,8 @@ function moveExistingClient() {
     let roomSelector = frameDocument.getElementById("room-selector-existing");
     window.parent.addNewClientToRoom(roomSelector.value);
 }
+
+function resolveClientRequests() {
+    // Resolve requests
+    window.parent.resolveClickedClientRequests();
+}

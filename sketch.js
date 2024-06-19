@@ -321,9 +321,26 @@ function addNewClientToRoom(roomCode) {
 	}
 }
 
+// Called from toolbar.js, does what the function name says
 function kickNewClickedClient() {
 	if (clickedItem instanceof Client) {
 		clickedItem.remove();
+	}
+}
+
+// Called from toolbar.js, does what the function name says
+function resolveClickedClientRequests() {
+	if (clickedItem instanceof Client) {
+		if (clickedItem.hasRequest == true) {
+			createResolveWindow();
+		}
+		else {
+			Swal.fire({
+				title: "No requests to resolve!",
+				text: "Client has no active requests.",
+				icon: "info"
+			});
+		}
 	}
 }
 
@@ -334,4 +351,25 @@ function getToolBarFrameDocument() {
 // Function to capitialise first letter of a string (duh)
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Resolve Client Requests Window related code
+function createResolveWindow() {
+	// Code based on outdated p5js code from my last year CEP WA3 Orbit Simulator: https://editor.p5js.org/Apollo199999999/sketches/K6hNOWJeI
+
+	// Clone the window template
+	let windowTemplate = document.getElementById("resolve-window");
+	let resolveWindow = windowTemplate.cloneNode(true);
+	resolveWindow.classList.remove("hidden");
+	resolveWindow.removeAttribute("id");
+
+	// Position the window correctly
+	resolveWindow.style.left = ((document.documentElement.clientWidth - width) / 2 + random(width / 4)).toString() + "px";
+	resolveWindow.style.top = ((document.documentElement.clientHeight - height) / 2 + random(height / 4)).toString() + "px";
+
+	// Attach the client's id and room code to the window using the dataset attribute
+	resolveWindow.dataset.clientRoomCode = clickedItem.roomCode;
+	resolveWindow.dataset.clientUUID = clickedItem.resolveWindowId;
+	
+	document.body.appendChild(resolveWindow);
 }

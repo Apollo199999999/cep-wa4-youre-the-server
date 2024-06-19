@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <title>CEP WA4</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- p5js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.js"></script>
@@ -18,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    
+
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
@@ -37,6 +39,26 @@
 </head>
 
 <div id="bg-div"></div>
+
+<!-- Resolve Client Requests Window Template -->
+<div class="flex flex-col absolute z-[999] overflow-hidden bg-base-100 rounded-md border border-primary w-3/12 hidden"
+    id="resolve-window" data-clientRoomCode="" data-clientUUID="">
+    <!-- Titlebar -->
+    <div class="flex bg-base-200 rounded-t-md text-lg w-full p-2 items-center">
+        <button class="btn btn-square btn-small" onclick="exit()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <p class="text-xl ml-2 font-bold">Resolve Client Requests</p>
+    </div>
+
+    <!-- Content -->
+    <div>
+        <button class="btn btn-primary">Hello</button>
+    </div>
+</div>
 
 <body>
     <style>
@@ -75,7 +97,6 @@
         .swal2-popup {
             font-family: "Inter", sans-serif !important;
         }
-
     </style>
 </body>
 

@@ -131,6 +131,9 @@ class Client {
             }
         }
 
+        // Create a random uuid so that the "resolve client requests" window can identify us, only necessary if we are not a new client
+        this.resolveWindowId = null
+
         // Start a timer to update client state, if applicable
         this.clientTimer = null;
         this.roomTimer = null;
@@ -139,12 +142,20 @@ class Client {
         }
         else {
             this.startRoomTimer();
+            this.resolveWindowId = crypto.randomUUID();
         }
+
+        // Variable to store resolve client request windows
+        this.resolveWindowFrame = null
     }
 
     remove() {
         if (this.clientTimer != null) {
             clearInterval(this.clientTimer);
+        }
+
+        if (this.roomTimer != null) {
+            clearInterval(this.roomTimer);
         }
 
         if (this.clientCollection != null) {
@@ -166,13 +177,15 @@ class Client {
     }
 
     startRoomTimer() {
+        // TODO: Reset values
         this.roomTimer = setInterval(() => {
             this.generateRequest()
-        }, 4000);
+        }, 400);
     }
 
     generateRequest() {
-        if (GV_NewClientsRemaining <= 0.1 * 17 * GV_GameLevel && this.hasRequest == false){
+        // TODO: Reset values
+        if (GV_NewClientsRemaining <= 0.1 * 10 * 17 * GV_GameLevel && this.hasRequest == false) {
             // Probability of generating request depends on game level
             let probability = Math.random();
             if (probability < Math.min(0.1 + 0.1 * GV_GameLevel, 0.5)) {
