@@ -155,6 +155,7 @@ class SpriteCollection {
     }
 
     empty() {
+        this.childPlaceholder.removeAll();
         this.childGridView = new Tiles(
             this.cleanTileArr,
             this.x + this.childSpriteWidth / 2 + this.tileGap,
@@ -185,7 +186,9 @@ class SpriteCollection {
 
     removeAllSprites() {
         // Iterate through children, marking them all as removed
-        for (let i = 0; i < this.childArr.length; i++) {
+        // Iterate backwards otherwise funny things may happen
+
+        for (let i = this.childArr.length - 1; i >= 0; i--) {
             if (this.childArr[i] instanceof Client) {
                 this.childArr[i].remove();
             }
@@ -194,12 +197,12 @@ class SpriteCollection {
             }
         }
 
-        for (let i = 0; i < this.childGridView.length; i++) {
+        for (let i = this.childGridView.length - 1; i >= 0; i--) {
             if (this.childGridView[i].removed == false) {
                 this.childGridView[i].remove();
             }
         }
-        
+
         this.backgroundSprite.remove();
         this.spriteRemoved = true;
     }

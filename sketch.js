@@ -123,9 +123,9 @@ function draw() {
 	// If no time is remaining, progress to the next level
 	if (GV_LevelTimeRemaining <= 0) {
 		// Remove everything
+		clickedItem = null;
 		roomsCollection.removeAllSprites();
 		newClientsCollection.removeAllSprites();
-		clickedItem = null;
 		resetToolbar(toolbarDocument);
 
 		// Re-init everything
@@ -230,23 +230,33 @@ function addNewRoom(roomCode) {
 		});
 	}
 	else if (roomsCollection.canAddchild() == true) {
-		// Create test client sprite to get dimensions
-		let testClientSprite = new Client("Test",
-			validRoomCodes[Math.floor(random(0, validRoomCodes.length))],
-			null,
-			clientHappyImg,
-			clientIrritatedImg,
-			clientAngryImg,
-			interNormal,
-			true,
-			clientAni);
+		// Disallow adding duplicate rooms
+		if (getAllRooms().includes(roomCode) == false) {
+			// Create test client sprite to get dimensions
+			let testClientSprite = new Client("Test",
+				validRoomCodes[Math.floor(random(0, validRoomCodes.length))],
+				null,
+				clientHappyImg,
+				clientIrritatedImg,
+				clientAngryImg,
+				interNormal,
+				true,
+				clientAni);
 
-		// Add new room
-		// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
-		let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, 'x', roomCode, interBold);
-		roomsCollection.push(newRoom);
+			// Add new room
+			// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
+			let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, 'x', roomCode, interBold);
+			roomsCollection.push(newRoom);
 
-		testClientSprite.remove();
+			testClientSprite.remove();
+		}
+		else {
+			Swal.fire({
+				title: "Room already exists!",
+				text: "You are trying to create a room that already exists.",
+				icon: "error"
+			});
+		}
 	}
 	else if (roomsCollection.canAddchild() == false) {
 		Swal.fire({
@@ -332,7 +342,10 @@ function kickNewClickedClient() {
 function resolveClickedClientRequests() {
 	if (clickedItem instanceof Client) {
 		if (clickedItem.hasRequest == true) {
-			createResolveWindow();
+			// Only open window if window not opened (wow so eloquent)
+			if (clickedItem.resolveWindowOpened == false) {
+				createResolveWindow(clickedItem.requestContentType);
+			}
 		}
 		else {
 			Swal.fire({
@@ -354,7 +367,7 @@ function capitalizeFirstLetter(string) {
 }
 
 // Resolve Client Requests Window related code
-function createResolveWindow() {
+function createResolveWindow(contentType) {
 	// Code based on outdated p5js code from my last year CEP WA3 Orbit Simulator: https://editor.p5js.org/Apollo199999999/sketches/K6hNOWJeI
 	// Remove any existing windows first
 	clickedItem.removeResolveWindow();
@@ -377,7 +390,242 @@ function createResolveWindow() {
 	let titlebar = resolveWindow.getElementsByClassName("titlebar")[0];
 	dragElement(resolveWindow, titlebar);
 
+	// Load room options when the input selector is clicked
+	let roomSelector = resolveWindow.getElementsByClassName("room-selector")[0];
+	roomSelector.addEventListener("focus", (event) => {
+		// Load all room options
+		let roomCodes = getAllRooms();
+		roomSelector.options.length = 0;
+		roomSelector.add(new Option("Select a room to update", null, true));
+
+		for (let i = 0; i < roomCodes.length; i++) {
+			roomSelector.add(new Option("Room " + roomCodes[i], roomCodes[i], false))
+		}
+	});
+
+	// Process what type of request the client is making
+	let requestImg = resolveWindow.getElementsByClassName("request-img")[0];
+	let requestText = resolveWindow.getElementsByClassName("request-text")[0];
+
+	if (contentType < 1 / 3) {
+		// Text request
+		requestImg.src = "./images/client/text.png";
+		requestText.textContent = "Client " + clickedItem.username + " has sent a text message to Room " + clickedItem.roomCode + ".";
+		resolveWindow.dataset.contentSafe = "true";
+	}
+	else if (contentType < 2 / 3) {
+		// Image request
+		requestImg.src = "./images/client/image.png";
+		requestText.textContent = "Client " + clickedItem.username + " has sent an image to Room " + clickedItem.roomCode + ".";
+
+		// Determine if content is safe
+		let safeProbability = Math.random();
+		if (safeProbability < 0.2) {
+			resolveWindow.dataset.contentSafe = "false";
+		}
+		else {
+			resolveWindow.dataset.contentSafe = "true";
+		}
+	}
+	else if (contentType < 1) {
+		// File request
+		requestImg.src = "./images/client/file.png";
+		requestText.textContent = "Client " + clickedItem.username + " has sent a file to Room " + clickedItem.roomCode + ".";
+
+		// Determine if content is safe
+		let safeProbability = Math.random();
+		if (safeProbability < 0.4) {
+			resolveWindow.dataset.contentSafe = "false";
+		}
+		else {
+			resolveWindow.dataset.contentSafe = "true";
+		}
+	}
+
+	// Implement scanning
+	let scanBtn = resolveWindow.getElementsByClassName("scan-btn")[0];
+	let scanText = resolveWindow.getElementsByClassName("scan-text")[0];
+	let scanProgress = 0;
+
+	scanBtn.addEventListener("click", (event) => {
+		scanBtn.disabled = true;
+
+		let progress = setInterval(() => {
+			scanProgress += 2;
+			scanText.textContent = "Scan progress: " + scanProgress.toString() + "%";
+
+			if (scanProgress == 100) {
+				if (resolveWindow.dataset.contentSafe == "true") {
+					scanText.classList.add("text-success");
+					scanText.textContent = "Scan did not find harmful content. Content is safe.";
+				}
+				else {
+					scanText.classList.add("text-error");
+					scanText.textContent = "Scan found harmful content.";
+				}
+
+				clearInterval(progress)
+			}
+
+		}, 10)
+	});
+
+
+	// Implement approve and deny buttons
+	let approveBtn = resolveWindow.getElementsByClassName("approve-btn")[0];
+	let denyBtn = resolveWindow.getElementsByClassName("deny-btn")[0];
+
+	// Approve btn
+	approveBtn.addEventListener("click", (event) => {
+		// Get the selected room code
+		let selectedRoomCode = roomSelector.value;
+
+		// Retreieve client data from window
+		let clientRoomCode = resolveWindow.dataset.clientRoomCode;
+		let clientUUID = resolveWindow.dataset.clientUUID;
+
+		// Get the requesting client and its room
+		let correctRoom = findRoomFromCode(clientRoomCode);
+		let client = findClientFromWindow(clientRoomCode, clientUUID);
+
+		// Different scenarios if content is harmful or not
+		if (resolveWindow.dataset.contentSafe == "true" && selectedRoomCode) {
+			// Content is safe
+			// Check whether player selected correct room
+			if (selectedRoomCode == clientRoomCode) {
+				// Safe content, Correct room, award user satisfaction points
+				GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
+				client.clientState = client.clientStates.Happy;
+			}
+			else {
+				// Safe content, wrong room, deduct user satisfaction points
+				let wrongRoom = findRoomFromCode(selectedRoomCode);
+				GV_UserSatisfaction -= wrongRoom.childArr.length;
+				for (let i = 0; i < wrongRoom.childArr.length; i++) {
+					let clientInRoom = wrongRoom.childArr[i];
+					if (clientInRoom != client) {
+						clientInRoom.changeStateNoPenalty();
+					}
+				}
+
+				client.clientState = client.clientStates.Happy;
+			}
+		}
+		else if (resolveWindow.dataset.contentSafe == "false" && selectedRoomCode) {
+			// Harmful content
+			// Check whether player selected correct room
+			if (selectedRoomCode == clientRoomCode) {
+				// Correct room but harmful content, deduct user satisfaction points
+				GV_UserSatisfaction -= correctRoom.childArr.length;
+				for (let i = 0; i < correctRoom.childArr.length; i++) {
+					let clientInRoom = correctRoom.childArr[i];
+					if (clientInRoom != client) {
+						clientInRoom.changeStateNoPenalty();
+					}
+				}
+
+				client.clientState = client.clientStates.Happy;
+			}
+			else {
+				// Wrong room, harmful content, deduct user satisfaction points
+				let wrongRoom = findRoomFromCode(selectedRoomCode);
+				GV_UserSatisfaction -= wrongRoom.childArr.length * 1.5;
+				for (let i = 0; i < wrongRoom.childArr.length; i++) {
+					let clientInRoom = wrongRoom.childArr[i];
+					if (clientInRoom != client) {
+						clientInRoom.changeStateNoPenalty();
+					}
+				}
+
+				client.clientState = client.clientStates.Happy;
+			}
+		}
+		
+		// Update calling client
+		if (client) {
+			client.hasRequest = false;
+			client.resolveWindowOpened = false;
+			clearInterval(client.clientTimer);
+		}
+		resolveWindow.remove();
+
+	});
+
+	// Deny btn
+	denyBtn.addEventListener("click", (event) => {
+		let clientRoomCode = resolveWindow.dataset.clientRoomCode;
+		let clientUUID = resolveWindow.dataset.clientUUID;
+
+		let correctRoom = findRoomFromCode(clientRoomCode);
+		let client = findClientFromWindow(clientRoomCode, clientUUID);
+
+		// Different scenarios if content is harmful or not
+		if (resolveWindow.dataset.contentSafe == "true") {
+			// Safe content, but wrongly denied request, decrease user satisfaction
+			client.clientState -= 1;
+			GV_UserSatisfaction -= 2;
+			
+			if (client.clientState == client.clientStates.Dead) {
+				client.remove();
+			}
+		}
+		else if (resolveWindow.dataset.contentSafe == "false") {
+			// Unsafe content, correctly blocked, award user satisfaction 
+			GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
+			client.clientState = client.clientStates.Happy;
+		}
+
+		// Update calling client
+		if (client) {
+			client.hasRequest = false;
+			client.resolveWindowOpened = false;
+			clearInterval(client.clientTimer);
+		}
+		resolveWindow.remove();
+	});
+
+	// Close Window Btn
+	let closeBtn = resolveWindow.getElementsByClassName("close-btn")[0];
+	closeBtn.addEventListener("click", (event) => {
+		let clientRoomCode = resolveWindow.dataset.clientRoomCode;
+		let clientUUID = resolveWindow.dataset.clientUUID;
+
+		let client = findClientFromWindow(clientRoomCode, clientUUID);
+
+		if (client) {
+			client.resolveWindowOpened = false;
+		}
+
+		resolveWindow.remove();
+	});
+
+
+	clickedItem.resolveWindowOpened = true;
 	document.body.appendChild(resolveWindow);
+}
+
+function findClientFromWindow(roomCode, uuid) {
+	for (let i = 0; i < roomsCollection.childArr.length; i++) {
+		if (roomsCollection.childArr[i].collectionHeader == roomCode) {
+			let room = roomsCollection.childArr[i];
+
+			for (let i = 0; i < room.childArr.length; i++) {
+				let client = room.childArr[i];
+				if (client.resolveWindowId == uuid) {
+					return client;
+				}
+			}
+		}
+	}
+}
+
+function findRoomFromCode(roomCode) {
+	for (let i = 0; i < roomsCollection.childArr.length; i++) {
+		if (roomsCollection.childArr[i].collectionHeader == roomCode) {
+			let room = roomsCollection.childArr[i];
+			return room;
+		}
+	}
 }
 
 function dragElement(windowDiv, titlebar) {

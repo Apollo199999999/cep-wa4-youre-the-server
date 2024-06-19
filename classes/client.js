@@ -133,6 +133,10 @@ class Client {
 
         // Create a random uuid so that the "resolve client requests" window can identify us, only necessary if we are not a new client
         this.resolveWindowId = null
+        // Keep track of whether the resolve client requests window is opened
+        this.resolveWindowOpened = false;
+        // Keep track of what content type the client is requesting. Generated using Math.random, and processed in the createResolveWindow() function in sktech.js
+        this.requestContentType = 0;
 
         // Start a timer to update client state, if applicable
         this.clientTimer = null;
@@ -167,16 +171,17 @@ class Client {
     }
 
     removeResolveWindow() {
-        if (this.resolveWindowId != null) {
+        if (this.resolveWindowId) {
             let resolveWindows = document.getElementsByClassName("resolve-window");
             for (let i = 0; i < resolveWindows.length; i++) {
                 if (resolveWindows[i].dataset.clientRoomCode == this.roomCode && resolveWindows[i].dataset.clientUUID == this.resolveWindowId) {
                    resolveWindows[i].remove();
+                   this.resolveWindowOpened = false;
                 }
             }
         }
     }
-    
+
     isMousePressed() {
         return this.sprite.mouse.pressing();
     }
@@ -188,21 +193,32 @@ class Client {
     }
 
     startRoomTimer() {
-        // TODO: Reset values
         this.roomTimer = setInterval(() => {
             this.generateRequest()
-        }, 400);
+        }, 6800);
     }
 
     generateRequest() {
-        // TODO: Reset values
-        if (GV_NewClientsRemaining <= 0.1 * 10 * 17 * GV_GameLevel && this.hasRequest == false) {
+        if (GV_NewClientsRemaining <= 0 && this.hasRequest == false) {
             // Probability of generating request depends on game level
             let probability = Math.random();
-            if (probability < Math.min(0.1 + 0.1 * GV_GameLevel, 0.5)) {
+            if (probability < Math.min(0.05 * GV_GameLevel, 0.4)) {
                 this.hasRequest = true;
+                this.requestContentType = Math.random();
                 this.startChangeStateTimer();
             }
+        }
+    }
+
+    changeStateNoPenalty() {
+        if (this.clientState == this.clientStates.Happy) {
+            this.clientState = this.clientStates.Irritated;
+        }
+        else if (this.clientState == this.clientStates.Irritated) {
+            this.clientState = this.clientStates.Angry;
+        }
+        else if (this.clientState == this.clientStates.Angry) {
+            this.remove();
         }
     }
 }

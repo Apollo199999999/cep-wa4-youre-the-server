@@ -2,50 +2,19 @@
 <html lang="en" data-theme="dark">
 
 <head>
-    <title>CEP WA4</title>
+    <title>Testing page</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- p5js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/addons/p5.sound.min.js"></script>
-
-    <!-- p5play -->
-    <script src="https://p5play.org/v3/planck.min.js"></script>
-    <script src="https://p5play.org/v3/p5play.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/p5play@3.22.7/p5play.min.js"></script> -->
-    <meta charset="utf-8" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-    <!-- SweetAlert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <!-- client code -->
-    <script src="gameVariables.js"></script>
-    <script src="./classes/random-words.js"></script>
-    <script src="./classes/client.js"></script>
-    <script src="./classes/sprite-collection.js"></script>
-    <script src="sketch.js"></script>
-
-    <!-- toolbar code -->
-    <script src="./ui/toolbar.js"></script>
 </head>
 
 <div id="bg-div"></div>
 
 <!-- Resolve Client Requests Window Template -->
-<div class="resolve-window flex-col absolute z-[999] overflow-hidden bg-base-100 rounded-md border border-primary w-4/12 hidden"
-    id="resolve-window" data-clientRoomCode="" data-clientUUID="" data-contentSafe="">
+<div class="resolve-window flex-col absolute z-[999] overflow-hidden bg-base-100 rounded-md border border-primary w-4/12"
+    id="resolve-window" data-clientRoomCode="" data-clientUUID="">
     <!-- Titlebar -->
     <div class="titlebar flex bg-neutral rounded-t-md text-lg w-full p-2 items-center">
-        <button class="close-btn btn btn-neutral min-h-0 h-6 w-6 p-0">
+        <button class="btn btn-neutral min-h-0 h-6 w-6 p-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -55,7 +24,7 @@
     </div>
 
     <!-- Content -->
-    <div class="resolve-window-content flex h-full w-full opacity-100 py-4">
+    <div class="flex h-full w-full opacity-100 py-4">
         <div class="pl-4 w-6/12">
             <p class="text-xl text-center ml-2 font-bold m-auto">Incoming Request:</p>
             <img class="request-img w-8/12 mx-auto my-2" src="./images/client/text.png" />
@@ -68,19 +37,16 @@
         <div class="pr-4 w-6/12">
             <p class="text-xl font-bold m-auto">Actions:</p>
 
-            <button class="scan-btn btn btn-primary w-full mt-2">Scan for harmful content</button>
-            <p class="scan-text text-sm mt-2 m-auto font-bold">Scan status: Scan not started</p>
+            <button class="btn btn-primary w-full mt-2">Scan for harmful content</button>
+            <p class="text-sm mt-2 m-auto text-success font-bold">Scan status: Scan not started</p>
 
             <div class="divider my-2"></div>
 
             <p class="text-xl font-bold m-auto">Resolve Request:</p>
             <select class="room-selector select select-primary w-full mt-2">
-                <option selected>Select a room to update</option>
+                <option selected>Select room to update</option>
             </select>
             <button class="approve-btn mt-2 btn btn-success w-full">Approve Request</button>
-
-            <div class="divider my-2"></div>
-
             <button class="deny-btn mt-2 btn btn-error w-full">Deny Request</button>
         </div>
     </div>
@@ -119,15 +85,6 @@
             transform: translate(-50%, -50%);
         }
 
-        /* For resolve client requests window */
-        .resolve-window-content {
-            background-color: #2b2b2b !important;
-        }
-
-        .titlebar {
-            background-color: #1c1c1c !important;
-        }
-
         h1,
         p,
         button,
@@ -137,7 +94,7 @@
 
         h1,
         p {
-            color: white;
+            color: white !important;
         }
 
         /* For Swal */
