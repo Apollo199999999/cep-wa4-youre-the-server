@@ -144,9 +144,6 @@ class Client {
             this.startRoomTimer();
             this.resolveWindowId = crypto.randomUUID();
         }
-
-        // Variable to store resolve client request windows
-        this.resolveWindowFrame = null
     }
 
     remove() {
