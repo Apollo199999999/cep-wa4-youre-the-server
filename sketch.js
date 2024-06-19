@@ -22,6 +22,7 @@ let roomsCollection;
 
 // Array of valid room codes that the clients can take (player will create rooms based on these codes)
 let validRoomCodes = [];
+let validRoomTileChars = ['a', 'b', 'c', 'd', 'e', 'f'];
 
 // iframe to display toolbar
 let toolbarFrame, toolbarDocument;
@@ -245,7 +246,7 @@ function addNewRoom(roomCode) {
 
 			// Add new room
 			// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
-			let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, 'x', roomCode, interBold);
+			let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, validRoomTileChars[roomsCollection.childArr.length], roomCode, interBold);
 			roomsCollection.push(newRoom);
 
 			testClientSprite.remove();
