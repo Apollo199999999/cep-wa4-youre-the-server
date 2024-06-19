@@ -77,7 +77,7 @@ function setup() {
 	toolbarFrame.position((document.documentElement.clientWidth - width) / 2 + width * 0.06 + newClientsCollection.w + roomsCollection.w, (document.documentElement.clientHeight - height) / 2);
 
 	// Game timer
-	setInterval(() => {GV_LevelTimeRemaining -= 1;}, 1000);
+	setInterval(() => { GV_LevelTimeRemaining -= 1; }, 1000);
 }
 
 function draw() {
@@ -262,7 +262,7 @@ function removeClickedRoom() {
 	if (clickedItem != null && clickedItem instanceof SpriteCollection) {
 		// Tank the user satisfaction
 		GV_UserSatisfaction -= clickedItem.childArr.length;
-		
+
 		// Remove the room from roomsCollection
 		roomsCollection.remove(clickedItem);
 		clickedItem.removeAllSprites();
@@ -297,7 +297,7 @@ function addNewClientToRoom(roomCode) {
 						interNormal,
 						false,
 						clientAni);
-				
+
 				// Check if the added client is added to the correct room
 				if (clickedItem.roomCode != roomCode) {
 					newClient.startChangeStateTimer();
@@ -356,6 +356,8 @@ function capitalizeFirstLetter(string) {
 // Resolve Client Requests Window related code
 function createResolveWindow() {
 	// Code based on outdated p5js code from my last year CEP WA3 Orbit Simulator: https://editor.p5js.org/Apollo199999999/sketches/K6hNOWJeI
+	// Remove any existing windows first
+	clickedItem.removeResolveWindow();
 
 	// Clone the window template
 	let windowTemplate = document.getElementById("resolve-window");
@@ -370,6 +372,46 @@ function createResolveWindow() {
 	// Attach the client's id and room code to the window using the dataset attribute
 	resolveWindow.dataset.clientRoomCode = clickedItem.roomCode;
 	resolveWindow.dataset.clientUUID = clickedItem.resolveWindowId;
-	
+
+	// Make the window draggable via the titlebar
+	let titlebar = resolveWindow.getElementsByClassName("titlebar")[0];
+	dragElement(resolveWindow, titlebar);
+
 	document.body.appendChild(resolveWindow);
+}
+
+function dragElement(windowDiv, titlebar) {
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+	titlebar.onmousedown = dragMouseDown;
+
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+
+		// set the element's new position:
+		windowDiv.style.top = (windowDiv.offsetTop - pos2) + "px";
+		windowDiv.style.left = (windowDiv.offsetLeft - pos1) + "px";
+	}
+
+	function closeDragElement() {
+		// stop moving when mouse button is released:
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
 }

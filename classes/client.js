@@ -159,10 +159,24 @@ class Client {
             this.clientCollection.remove(this);
         }
 
+        // Remove the corresponding "resolve window" if applicable
+        this.removeResolveWindow();
+
         this.sprite.remove();
         this.spriteRemoved = true;
     }
 
+    removeResolveWindow() {
+        if (this.resolveWindowId != null) {
+            let resolveWindows = document.getElementsByClassName("resolve-window");
+            for (let i = 0; i < resolveWindows.length; i++) {
+                if (resolveWindows[i].dataset.clientRoomCode == this.roomCode && resolveWindows[i].dataset.clientUUID == this.resolveWindowId) {
+                   resolveWindows[i].remove();
+                }
+            }
+        }
+    }
+    
     isMousePressed() {
         return this.sprite.mouse.pressing();
     }
