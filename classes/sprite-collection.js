@@ -48,7 +48,8 @@ class SpriteCollection {
             push();
 
             if (this.stroke == null) {
-                noStroke();
+                strokeWeight(1);
+                stroke("black");
             }
             else {
                 strokeWeight(2);
