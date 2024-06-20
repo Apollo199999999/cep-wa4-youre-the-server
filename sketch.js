@@ -14,6 +14,9 @@ let clientHappyImg, clientIrritatedImg, clientAngryImg, clientAni;
 // Declare font variables
 let interLight, interNormal, interBold;
 
+// Declare sound variables
+let sfx_usDecrease, sfx_usIncrease, sfx_clientRequest, sfx_clientHappy, sfx_clientIrritated, sfx_clientAngry, bgm;
+
 // ClientCollection object for the "New Clients" section
 let newClientsCollection;
 
@@ -40,6 +43,14 @@ function preload() {
 	interLight = loadFont("./resources/fonts/Inter-Thin.ttf");
 	interNormal = loadFont("./resources/fonts/Inter-Regular.ttf");
 	interBold = loadFont("./resources/fonts/Inter-Bold.ttf");
+
+	sfx_usDecrease = loadSound("./resources/sfx/us_decrease.ogg");
+	sfx_usIncrease = loadSound("./resources/sfx/us_increase.ogg");
+	sfx_clientRequest = loadSound("./resources/sfx/client_request.ogg");
+	sfx_clientHappy = loadSound("./resources/sfx/client_happy.ogg");
+	sfx_clientIrritated = loadSound("./resources/sfx/client_irritated.ogg");
+	sfx_clientAngry = loadSound("./resources/sfx/client_angry.ogg");
+	bgm = loadSound("./resources/sfx/bgm.mp3");
 }
 
 function setup() {
@@ -57,7 +68,11 @@ function setup() {
 		clientAngryImg,
 		interNormal,
 		true,
-		clientAni);
+		clientAni,
+		sfx_clientIrritated,
+		sfx_clientAngry,
+		sfx_clientRequest,
+		sfx_usDecrease);
 
 	// Area where new clients are spawned
 	newClientsCollection = new SpriteCollection(width * 0.02, height * 0.02, 9, 3, testClientSprite.w, testClientSprite.h, '=', "New clients", interBold);
@@ -79,6 +94,9 @@ function setup() {
 
 	// Game timer
 	setInterval(() => { GV_LevelTimeRemaining -= 1; }, 1000);
+
+	bgm.setVolume(0.35);
+	bgm.play();
 }
 
 function draw() {
@@ -101,8 +119,13 @@ function draw() {
 				clientAngryImg,
 				interNormal,
 				true,
-				clientAni);
+				clientAni,
+				sfx_clientIrritated,
+				sfx_clientAngry,
+				sfx_clientRequest,
+				sfx_usDecrease);
 
+		sfx_clientHappy.play();
 		newClientsCollection.push(newClient);
 		GV_NewClientsRemaining -= 1;
 	}
@@ -128,6 +151,7 @@ function draw() {
 		roomsCollection.removeAllSprites();
 		newClientsCollection.removeAllSprites();
 		resetToolbar(toolbarDocument);
+		bgm.stop();
 
 		// Re-init everything
 		initCollections();
@@ -137,6 +161,7 @@ function draw() {
 		GV_LevelTimeRemaining = 4 * 60;
 		clientSpawnRate = 0.25 * GV_GameLevel;
 		GV_NewClientsRemaining = 17 * GV_GameLevel;
+		bgm.play();
 	}
 }
 
@@ -207,7 +232,11 @@ function initCollections() {
 		clientAngryImg,
 		interNormal,
 		true,
-		clientAni);
+		clientAni,
+		sfx_clientIrritated,
+		sfx_clientAngry,
+		sfx_clientRequest,
+		sfx_usDecrease);
 
 	// Area where new clients are spawned
 	newClientsCollection = new SpriteCollection(width * 0.02, height * 0.02, 9, 3, testClientSprite.w, testClientSprite.h, '=', "New clients", interBold);
@@ -242,7 +271,11 @@ function addNewRoom(roomCode) {
 				clientAngryImg,
 				interNormal,
 				true,
-				clientAni);
+				clientAni,
+				sfx_clientIrritated,
+				sfx_clientAngry,
+				sfx_clientRequest,
+				sfx_usDecrease);
 
 			// Add new room
 			// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
@@ -273,6 +306,9 @@ function removeClickedRoom() {
 	if (clickedItem != null && clickedItem instanceof SpriteCollection) {
 		// Tank the user satisfaction
 		GV_UserSatisfaction -= clickedItem.childArr.length;
+		if (clickedItem.childArr.length > 0) {
+			sfx_usDecrease.play();
+		}
 
 		// Remove the room from roomsCollection
 		roomsCollection.remove(clickedItem);
@@ -307,7 +343,11 @@ function addNewClientToRoom(roomCode) {
 						clientAngryImg,
 						interNormal,
 						false,
-						clientAni);
+						clientAni,
+						sfx_clientIrritated,
+						sfx_clientAngry,
+						sfx_clientRequest,
+						sfx_usDecrease);
 
 				// Check if the added client is added to the correct room
 				if (clickedItem.roomCode != roomCode) {
@@ -315,6 +355,7 @@ function addNewClientToRoom(roomCode) {
 				}
 				else {
 					GV_UserSatisfaction += (3 - clickedItem.clientState);
+					sfx_usIncrease.play();
 				}
 
 				roomsCollection.childArr[i].push(newClient);
@@ -496,12 +537,14 @@ function createResolveWindow(contentType) {
 			if (selectedRoomCode == clientRoomCode) {
 				// Safe content, Correct room, award user satisfaction points
 				GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
+				sfx_usIncrease.play();
 				client.clientState = client.clientStates.Happy;
 			}
 			else {
 				// Safe content, wrong room, deduct user satisfaction points
 				let wrongRoom = findRoomFromCode(selectedRoomCode);
 				GV_UserSatisfaction -= wrongRoom.childArr.length;
+				sfx_usDecrease.play();
 				for (let i = 0; i < wrongRoom.childArr.length; i++) {
 					let clientInRoom = wrongRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -518,6 +561,7 @@ function createResolveWindow(contentType) {
 			if (selectedRoomCode == clientRoomCode) {
 				// Correct room but harmful content, deduct user satisfaction points
 				GV_UserSatisfaction -= correctRoom.childArr.length;
+				sfx_usDecrease.play();
 				for (let i = 0; i < correctRoom.childArr.length; i++) {
 					let clientInRoom = correctRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -531,6 +575,7 @@ function createResolveWindow(contentType) {
 				// Wrong room, harmful content, deduct user satisfaction points
 				let wrongRoom = findRoomFromCode(selectedRoomCode);
 				GV_UserSatisfaction -= wrongRoom.childArr.length * 1.5;
+				sfx_usDecrease.play();
 				for (let i = 0; i < wrongRoom.childArr.length; i++) {
 					let clientInRoom = wrongRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -541,7 +586,7 @@ function createResolveWindow(contentType) {
 				client.clientState = client.clientStates.Happy;
 			}
 		}
-		
+
 		// Update calling client
 		if (client) {
 			client.hasRequest = false;
@@ -563,16 +608,12 @@ function createResolveWindow(contentType) {
 		// Different scenarios if content is harmful or not
 		if (resolveWindow.dataset.contentSafe == "true") {
 			// Safe content, but wrongly denied request, decrease user satisfaction
-			client.clientState -= 1;
-			GV_UserSatisfaction -= 2;
-			
-			if (client.clientState == client.clientStates.Dead) {
-				client.remove();
-			}
+			client.changeStateNoPenalty();
 		}
 		else if (resolveWindow.dataset.contentSafe == "false") {
 			// Unsafe content, correctly blocked, award user satisfaction 
 			GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
+			sfx_usIncrease.play();
 			client.clientState = client.clientStates.Happy;
 		}
 
