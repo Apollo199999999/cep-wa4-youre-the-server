@@ -195,7 +195,7 @@ class Client {
     startRoomTimer() {
         this.roomTimer = setInterval(() => {
             this.generateRequest()
-        }, 6800);
+        }, random(5500, 8000));
     }
 
     generateRequest() {
