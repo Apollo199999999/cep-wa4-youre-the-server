@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEP WA4</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- client backend -->
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="flex w-screen h-screen flex-col" id="main-div">
+        <div class="flex flex-col p-8 m-auto w-[90vw] h-[90vh] bg-base-100 rounded-md drop-shadow-lg">
+            <button class="btn btn-neutral w-full max-w-fit align-middle" onclick="window.location.href='/'">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+                </svg>
+                Back to Main Menu
+            </button>
+
+            <div class="overflow-y-auto mt-4 pr-2">
+                <p class="text-lg font-bold mb-2">Welcome to You're the Server!</p>
+                <h1 class="text-lg font-semibold">1. Overview: </h1>
+                <ul class="list-disc list-outside pl-5 mb-2">
+                    <li>You're the Server! is a game where you are a chat server.</li>
+                    <li>You are the employee of a widely used messaging platform, but the company has recently taken
+                        cost-cutting measures, which included ending their Firebase subscription, so now you have to
+                        manually run the server!
+                    </li>
+                    <li>As a chat server, you are in charge of:</li>
+
+                    <ul class="list-disc list-outside pl-5">
+                        <li>Sorting newly joined clients into rooms,</li>
+                        <li>receiving any files, images, or text messages that the client has sent, and</li>
+                        <li>protecting other clients in the server from receiving harmful content from a client.</li>
+                    </ul>
+
+                    <li>The objective of this game is to progress to as many levels as possible before you can no longer
+                        cope.</li>
+
+                    <li>Performing certain actions in the game will either increase or decrease your User Satisfaction.
+                        When your User Satisfaction decreases to 0, the game ends.</li>
+                </ul>
+
+                <h1 class="text-lg font-semibold">2. Gameplay: </h1>
+
+                <h1 class="text-md font-semibold">Basic Gameplay: </h1>
+                <img src="./images/howto/1.png" class="w-full max-w-screen-lg my-2" />
+
+                <ul class="list-disc list-outside pl-5 mb-2">
+                    <li>Each level has a time limit of 4 minutes. If at the end of 4 minutes your User Satisfaction is
+                        greater than 0, you automatically progress to the next level.</li>
+
+                    <li>At the start of the game, new clients are spawned at the "New Clients" Section. Each client has
+                        a username and a designated room code.</li>
+
+                    <li>You are to create the rooms for the clients and sort the clients into their corresponding rooms.
+                    </li>
+
+                    <li>You can do so by first clicking on the "Rooms" section and adding a new room under the "Actions"
+                        section, then clicking a new client and sorting them into their corresponding room using the
+                        dropdown menu in the "Actions" section.</li>
+
+                    <li>Be careful however, as if you take too long, clients can go from being happy to being irritated,
+                        and go from being irritated to being angry. </li>
+
+                    <li>When a client changes their emotion to one that is
+                        more negative, you lose 2 User Satisfaction points. Eventually, if left unattended to for too
+                        long, the client will rage quit and leave the server, decreasing User Satisfaction.</li>
+
+                    <li>Sorting clients into correct rooms will allow you to gain User Satisfaction points. The number
+                        of points you gain depends on the client's emotion when you sorted the client into the correct
+                        room. A "happy" client who was sorted into the correct room will yield a greater increase in
+                        User Satisfaction than a client who is "angry".</li>
+
+                    <li>The "Unspawned Clients Left" metric tells you how many clients are yet to be spawned in the "New
+                        Clients" section.</li>
+
+                    <li>When the number of unspawned clients left decreases to 0, the existing clients in the rooms will
+                        begin to make "requests", which you have to resolve.</li>
+
+                    <li>When a client makes a request, this is indicated by the speech bubble
+                        animation that appears beside them.</li>
+                </ul>
+
+                <h1 class="text-md font-semibold">Resolving client requests: </h1>
+                <ul class="list-disc list-outside pl-5">
+                    <li>To resolve a client's request, click on the client who is making the request and click the
+                        "Resolve Client Requests" button that appears under the "Actions" section.
+                    </li>
+
+                    <li>Each client can make 1 of 3 requests:
+                    </li>
+                    <ul class="list-disc list-outside pl-5">
+                        <li>Sending a text message,</li>
+                        <img src="./images/howto/4.png" class="w-full max-w-screen-lg my-2" />
+                        <li>sending an image, or</li>
+                        <img src="./images/howto/2.png" class="w-full max-w-screen-lg my-2" />
+                        <li>sending a file.</li>
+                        <img src="./images/howto/3.png" class="w-full max-w-screen-lg my-2" />
+                    </ul>
+
+                    <li>Requests may be safe or harmful:</li>
+                    <ul class="list-disc list-outside pl-5">
+                        <li>Text messages are always safe, it has a 0% chance of being harmful.</li>
+                        <li>Images have a 20% chance of being harmful.</li>
+                        <li>Files have a 40% chance of being harmful.</li>
+                    </ul>
+
+                    <li>To check whether a request is harmful, click the "Scan for harmful content" button.</li>
+
+                    <li>If a request is harmful, it should be denied, while if a request is safe, it should be approved
+                        in the correct room.</li>
+
+                    <li>Resolving requests correctly will yield an increase in User Satisfaction points, based on the
+                        number of people in the requesting client's room, and how fast you resolved the client's
+                        request. The client making the request will also go back to being happy after the request is
+                        correctly resolved.</li>
+
+                    <li>Resolving requests wrongly will yield the following outcomes:</li>
+                    <ul class="list-disc list-outside pl-5">
+                        <li>If request is safe:</li>
+                        <ul class="list-disc list-outside pl-5">
+                            <li>If request is approved in the wrong room, all clients in the wrong room degrade their
+                                emotion to the next one, i.e. a “happy” client becomes “irritated”, an “irritated”
+                                client
+                                becomes “angry”, and an “angry” client leaves the server. User satisfaction decreases by
+                                the number of people in the wrong room. The client who made that request becomes happy
+                                after that.</li>
+
+                            <li>If request is wrongly denied, the client who made that request degrades their emotion to
+                                the next one. User Satisfaction decreases by 2.</li>
+                        </ul>
+
+                        <li>If request is unsafe:</li>
+                        <ul class="list-disc list-outside pl-5">
+                            <li>If request is approved in the correct room, all clients in the correct room degrade
+                                their emotion to the next one, i.e. a “happy” client becomes “irritated”, an “irritated”
+                                client becomes “angry”, and an “angry” client leaves the server. User satisfaction
+                                decreases by the number of people in that room. The client who made that request becomes
+                                happy after
+                                that.</li>
+
+                            <li>If request is approved in the wrong room, all clients in the wrong room degrade their
+                                emotion to the next one, i.e. a “happy” client becomes “irritated”, an “irritated”
+                                client
+                                becomes “angry”, and an “angry” client leaves the server. User satisfaction decreases by
+                                the number of people in that room multiplied by 1.5. The client who made that request
+                                becomes happy
+                                after that.</li>
+                        </ul>
+
+                    </ul>
+
+                    <li>Once again, if you take too long to resolve a client's request, they will first become irritated
+                        before becoming angry after some time, eventually rage quitting and leaving the server if they
+                        are not attended
+                        to. Once again, when a client changes their emotion to a more negative one or leaves the server,
+                        User Satisfaction decreases by 2.</li>
+
+                    <div class="divider divider-neutral">Finish</div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    /* For background image */
+    #main-div::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: -1;
+
+        display: block;
+        background-image: url('./images/menu-bg.jpg');
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+
+        transform: scale(1.02);
+        filter: blur(5px);
+    }
+
+    h1,
+    p,
+    button {
+        font-family: "Inter", sans-serif !important;
+    }
+</style>

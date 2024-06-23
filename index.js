@@ -4,7 +4,8 @@ function startGame() {
 }
 
 function howToPlay() {
-    // TODO
+    // Navigate to howTo.html
+    window.location.href = "howTo.html";
 }
 
 function aboutGame() {
