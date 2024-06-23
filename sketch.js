@@ -125,7 +125,7 @@ function draw() {
 				sfx_clientRequest,
 				sfx_usDecrease);
 
-		sfx_clientHappy.play();
+		if (GV_ShouldPlaySfx) sfx_clientHappy.play();
 		newClientsCollection.push(newClient);
 		GV_NewClientsRemaining -= 1;
 	}
@@ -138,6 +138,10 @@ function draw() {
 
 	// Update the toolbar
 	updateToolbar(toolbarDocument, GV_UserSatisfaction, GV_NewClientsRemaining, GV_GameLevel, GV_LevelTimeRemaining);
+
+	// Update game sound variables
+	GV_ShouldPlaySfx = toolbarIsSoundFxChecked(toolbarDocument);
+	GV_ShouldPlayBgm = toolbarIsBgmChecked(toolbarDocument);
 
 	// Trigger gameover if applicable
 	if (GV_UserSatisfaction <= 0) {
@@ -165,10 +169,10 @@ function draw() {
 	}
 
 	// Update bgmusic
-	if (toolbarIsBgmChecked(toolbarDocument) == true && bgm.isPlaying() == false) {
+	if (GV_ShouldPlayBgm == true && bgm.isPlaying() == false) {
 		bgm.loop();
 	}
-	else if (toolbarIsBgmChecked(toolbarDocument) == false && bgm.isPlaying() == true) {
+	else if (GV_ShouldPlayBgm == false && bgm.isPlaying() == true) {
 		bgm.pause();
 	}
 }
@@ -315,7 +319,7 @@ function removeClickedRoom() {
 		// Tank the user satisfaction
 		GV_UserSatisfaction -= clickedItem.childArr.length;
 		if (clickedItem.childArr.length > 0) {
-			sfx_usDecrease.play();
+			if (GV_ShouldPlaySfx) sfx_usDecrease.play();
 		}
 
 		// Remove the room from roomsCollection
@@ -363,7 +367,7 @@ function addNewClientToRoom(roomCode) {
 				}
 				else {
 					GV_UserSatisfaction += (3 - clickedItem.clientState);
-					sfx_usIncrease.play();
+					if (GV_ShouldPlaySfx) sfx_usIncrease.play();
 				}
 
 				roomsCollection.childArr[i].push(newClient);
@@ -545,14 +549,14 @@ function createResolveWindow(contentType) {
 			if (selectedRoomCode == clientRoomCode) {
 				// Safe content, Correct room, award user satisfaction points
 				GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
-				sfx_usIncrease.play();
+				if (GV_ShouldPlaySfx) sfx_usIncrease.play();
 				client.clientState = client.clientStates.Happy;
 			}
 			else {
 				// Safe content, wrong room, deduct user satisfaction points
 				let wrongRoom = findRoomFromCode(selectedRoomCode);
 				GV_UserSatisfaction -= wrongRoom.childArr.length;
-				sfx_usDecrease.play();
+				if (GV_ShouldPlaySfx) sfx_usDecrease.play();
 				for (let i = 0; i < wrongRoom.childArr.length; i++) {
 					let clientInRoom = wrongRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -569,7 +573,7 @@ function createResolveWindow(contentType) {
 			if (selectedRoomCode == clientRoomCode) {
 				// Correct room but harmful content, deduct user satisfaction points
 				GV_UserSatisfaction -= correctRoom.childArr.length;
-				sfx_usDecrease.play();
+				if (GV_ShouldPlaySfx) sfx_usDecrease.play();
 				for (let i = 0; i < correctRoom.childArr.length; i++) {
 					let clientInRoom = correctRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -583,7 +587,7 @@ function createResolveWindow(contentType) {
 				// Wrong room, harmful content, deduct user satisfaction points
 				let wrongRoom = findRoomFromCode(selectedRoomCode);
 				GV_UserSatisfaction -= wrongRoom.childArr.length * 1.5;
-				sfx_usDecrease.play();
+				if (GV_ShouldPlaySfx) sfx_usDecrease.play();
 				for (let i = 0; i < wrongRoom.childArr.length; i++) {
 					let clientInRoom = wrongRoom.childArr[i];
 					if (clientInRoom != client) {
@@ -621,7 +625,7 @@ function createResolveWindow(contentType) {
 		else if (resolveWindow.dataset.contentSafe == "false") {
 			// Unsafe content, correctly blocked, award user satisfaction 
 			GV_UserSatisfaction += correctRoom.childArr.length * (-0.5 * client.clientState + 2);
-			sfx_usIncrease.play();
+			if (GV_ShouldPlaySfx) sfx_usIncrease.play();
 			client.clientState = client.clientStates.Happy;
 		}
 

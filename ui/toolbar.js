@@ -94,10 +94,12 @@ function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level,
 }
 
 function toolbarIsSoundFxChecked(frameDocument) {
+    // Try-catch in case frameDocument hasn't loaded yet when we call it from sketch.js
     try { return frameDocument.getElementById("sfx-checkbox").checked; } catch { }
 }
 
 function toolbarIsBgmChecked(frameDocument) {
+    // Try-catch in case frameDocument hasn't loaded yet when we call it from sketch.js
     try { return frameDocument.getElementById("bgm-checkbox").checked } catch { };
 }
 

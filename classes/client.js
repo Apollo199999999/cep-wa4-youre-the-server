@@ -123,17 +123,17 @@ class Client {
         this.changeStateFunction = () => {
             if (this.clientState == this.clientStates.Happy) {
                 this.clientState = this.clientStates.Irritated;
-                this.irritatedSfx.play();
+                if (GV_ShouldPlaySfx) this.irritatedSfx.play();
                 GV_UserSatisfaction -= 2;
             }
             else if (this.clientState == this.clientStates.Irritated) {
                 this.clientState = this.clientStates.Angry;
-                this.angrySfx.play();
+                if (GV_ShouldPlaySfx) this.angrySfx.play();
                 GV_UserSatisfaction -= 2;
             }
             else if (this.clientState == this.clientStates.Angry) {
                 GV_UserSatisfaction -= 2;
-                this.deathSfx.play();
+                if (GV_ShouldPlaySfx) this.deathSfx.play();
                 this.remove();
             }
         }
@@ -210,7 +210,7 @@ class Client {
             // Probability of generating request depends on game level
             let probability = Math.random();
             if (probability < Math.min(0.05 * GV_GameLevel, 0.4)) {
-                this.requestSfx.play();
+                if (GV_ShouldPlaySfx) this.requestSfx.play();
                 this.hasRequest = true;
                 this.requestContentType = Math.random();
                 this.startChangeStateTimer();
@@ -220,15 +220,15 @@ class Client {
 
     changeStateNoPenalty() {
         if (this.clientState == this.clientStates.Happy) {
-            this.irritatedSfx.play();
+            if (GV_ShouldPlaySfx) this.irritatedSfx.play();
             this.clientState = this.clientStates.Irritated;
         }
         else if (this.clientState == this.clientStates.Irritated) {
-            this.angrySfx.play();
+            if (GV_ShouldPlaySfx) this.angrySfx.play();
             this.clientState = this.clientStates.Angry;
         }
         else if (this.clientState == this.clientStates.Angry) {
-            this.deathSfx.play();
+            if (GV_ShouldPlaySfx) this.deathSfx.play();
             this.remove();
         }
     }
