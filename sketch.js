@@ -15,7 +15,7 @@ let clientHappyImg, clientIrritatedImg, clientAngryImg, clientAni;
 let interLight, interNormal, interBold;
 
 // Declare sound variables
-let sfx_usDecrease, sfx_usIncrease, sfx_clientRequest, sfx_clientHappy, sfx_clientIrritated, sfx_clientAngry, bgm;
+let sfx_usDecrease, sfx_usIncrease, sfx_clientRequest, sfx_clientHappy, sfx_clientIrritated, sfx_clientAngry, sfx_levelUp, bgm;
 
 // ClientCollection object for the "New Clients" section
 let newClientsCollection;
@@ -50,7 +50,8 @@ function preload() {
 	sfx_clientHappy = loadSound("./resources/sfx/client_happy.ogg");
 	sfx_clientIrritated = loadSound("./resources/sfx/client_irritated.ogg");
 	sfx_clientAngry = loadSound("./resources/sfx/client_angry.ogg");
-	bgm = loadSound("./resources/sfx/bgm.mp3");
+	sfx_levelUp = loadSound("./resources/sfx/level_up.mp3")
+	bgm = loadSound("./resources/bgm/bgm.mp3");
 }
 
 function setup() {
@@ -166,6 +167,7 @@ function draw() {
 		clientSpawnRate = 0.25 * GV_GameLevel;
 		GV_NewClientsRemaining = 17 * GV_GameLevel;
 		bgm.loop();
+		displayConfetti();
 	}
 
 	// Update bgmusic
@@ -220,6 +222,48 @@ function mousePressed() {
 		// Set the stroke colour of the clicked item to indicate it is being clicked
 		clickedItem.stroke = "#0078d4";
 	}
+}
+
+// Function to display confetti
+function displayConfetti() {
+	let particles = [];
+
+	for (let i = 0; i < 100; i++) {
+		// Random position localised at the centre of the screen
+		let x = random(width / 2 - 10, width / 2 + 10);
+		let y = random(height / 2 - 10, height / 2 + 10);
+
+		// Random direction of velocity, based on polar coords
+		let theta = random(2 * Math.PI);
+		let r = random(-20, 20);
+		let vx = r * cos(theta);
+		let vy = r * sin(theta);
+
+		// Push new particle
+		let particle = new Particle(x, y, vx, vy, 1, 6);
+		particles.push(particle);
+	}
+
+	if (GV_ShouldPlaySfx){
+		sfx_levelUp.setVolume(8.0);
+		sfx_levelUp.play();
+	} 
+	
+	// Apply force on particles
+	let timer = setInterval(() => {
+		for (let i = particles.length - 1; i >= 0; i--) {
+			particles[i].applyForce(0, 0.2);
+		}
+	}, 7000 / 60);
+
+	// Remove all particles at a later time
+	setTimeout(() => {
+		for (let i = particles.length - 1; i >= 0; i--) {
+			particles[i].remove();
+			particles.splice(i, 1);
+		}
+		clearInterval(timer);
+	}, 7000)
 }
 
 // Function to generate random room codes
