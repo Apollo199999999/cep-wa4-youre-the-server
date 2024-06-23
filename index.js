@@ -9,6 +9,6 @@ function howToPlay() {
 }
 
 function aboutGame() {
-    // TODO
-    // Remember to link to source code, portfolio, and icons8 fluency pages in the about section
+    // Navigate to about.html
+    window.location.href = "about.html";
 }

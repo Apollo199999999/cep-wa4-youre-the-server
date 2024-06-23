@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEP WA4</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="flex w-screen h-screen flex-col" id="main-div">
+        <div class="flex flex-col p-8 m-auto w-[90vw] max-w-screen-sm bg-base-100 rounded-md drop-shadow-lg">
+            <button class="btn btn-neutral w-full max-w-fit align-middle" onclick="window.location.href='/'">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+                </svg>
+                Back to Main Menu
+            </button>
+
+            <div class="overflow-y-auto mt-4 pr-2">
+                <img class="mx-auto my-0" width="96" height="96" src="./images/server-icon.png" alt="server-icon" />
+
+                <h1 class="my-0 font-bold text-2xl text-center">You're the Server!</h1>
+                <p class="mt-2 text-md mx-auto my-0 text-center">A game where you are a chat server.</p>
+
+                <p class="text-center mt-1"><a target="_blank" rel="noopener noreferrer" class="link link-info"
+                        href="https://github.com/Apollo199999999/cep-wa4-youre-the-server">Source code</a></p>
+
+                <p class="text-center mt-1"><a target="_blank" rel="noopener noreferrer" class="link link-info text-center"
+                        href="https://matthiaswang.notion.site/CEP-WA4-Ping-Pong-21df4c584cd64c138a3dffa4851a27f0?pvs=74">Portfolio
+                        link</a></p>
+                <p class="text-center mt-1 mb-8">Icons used made by <a target="_blank" rel="noopener noreferrer"
+                        class="link link-info text-center" href="https://icons8.com/icons/fluency/">Icons8</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    /* For background image */
+    #main-div::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: -1;
+
+        display: block;
+        background-image: url('./images/menu-bg.jpg');
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+
+        transform: scale(1.02);
+        filter: blur(5px);
+    }
+
+    h1,
+    p,
+    button {
+        font-family: "Inter", sans-serif !important;
+    }
+</style>
