@@ -40,12 +40,28 @@
                 <p class="text-md">User Satisfaction:</p>
                 <progress id="user-satisfaction-progress" class="progress progress-primary w-full" max="100"></progress>
             </div>
-            
+
         </div>
-       
+
 
         <!-- Actions section -->
         <h1 class="text-xl font-bold mt-4">Actions</h1>
+
+        <!-- Sound controls -->
+        <div class="form-control">
+            <label class="label cursor-pointer px-0">
+                <span class="label-text text-base">Play sound effects</span>
+                <input type="checkbox" checked class="checkbox checkbox-primary" id="sfx-checkbox" />
+            </label>
+        </div>
+
+        <div class="form-control">
+            <label class="label cursor-pointer px-0">
+                <span class="label-text text-base">Play background music</span>
+                <input type="checkbox" checked class="checkbox checkbox-primary" id="bgm-checkbox"/>
+            </label>
+        </div>
+
 
         <div id="room-collection-actions" class="mt-2 hidden">
             <input id="room-code-input" type="text" placeholder="Enter Room Code"
@@ -65,7 +81,7 @@
                 <button class="btn btn-primary w-full mt-2" onclick="addNewClient()">Add client to room</button>
             </div>
 
-            <div class="divider divider-success"></div> 
+            <div class="divider divider-success"></div>
 
             <button class="btn btn-error w-full" onclick="kickNewClient()">Kick Client</button>
         </div>
@@ -73,7 +89,7 @@
         <div id="added-client-actions" class="mt-2 hidden">
             <button class="btn btn-primary w-full" onclick="resolveClientRequests()">Resolve client requests</button>
 
-            <div class="divider divider-success"></div> 
+            <div class="divider divider-success"></div>
 
             <select id="room-selector-existing" class="select select-error w-full">
                 <option selected>Select a room</option>
@@ -98,12 +114,14 @@
     h1,
     p,
     button,
-    select {
+    select,
+    span {
         font-family: "Inter", sans-serif !important;
     }
 
     h1,
-    p {
+    p,
+    span {
         color: white !important;
     }
 </style>

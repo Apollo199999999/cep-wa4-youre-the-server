@@ -96,7 +96,7 @@ function setup() {
 	setInterval(() => { GV_LevelTimeRemaining -= 1; }, 1000);
 
 	bgm.setVolume(0.35);
-	bgm.play();
+	bgm.loop();
 }
 
 function draw() {
@@ -161,7 +161,15 @@ function draw() {
 		GV_LevelTimeRemaining = 4 * 60;
 		clientSpawnRate = 0.25 * GV_GameLevel;
 		GV_NewClientsRemaining = 17 * GV_GameLevel;
-		bgm.play();
+		bgm.loop();
+	}
+
+	// Update bgmusic
+	if (toolbarIsBgmChecked(toolbarDocument) == true && bgm.isPlaying() == false) {
+		bgm.loop();
+	}
+	else if (toolbarIsBgmChecked(toolbarDocument) == false && bgm.isPlaying() == true) {
+		bgm.pause();
 	}
 }
 

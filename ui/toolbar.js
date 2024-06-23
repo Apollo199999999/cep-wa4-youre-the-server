@@ -93,6 +93,14 @@ function updateToolbar(frameDocument, userSatisfaction, clientsRemaining, level,
     } catch { }
 }
 
+function toolbarIsSoundFxChecked(frameDocument) {
+    try { return frameDocument.getElementById("sfx-checkbox").checked; } catch { }
+}
+
+function toolbarIsBgmChecked(frameDocument) {
+    try { return frameDocument.getElementById("bgm-checkbox").checked } catch { };
+}
+
 // Event handlers
 function addRoomBtnClicked() {
     // Get the document of this iframe
