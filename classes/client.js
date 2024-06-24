@@ -196,7 +196,7 @@ class Client {
     startChangeStateTimer() {
         this.clientTimer = setInterval(() => {
             this.changeStateFunction();
-        }, 5500 - GV_GameLevel * 100);
+        }, 5500);
     }
 
     startRoomTimer() {

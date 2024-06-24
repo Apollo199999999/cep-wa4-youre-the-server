@@ -163,7 +163,7 @@ function draw() {
 		generateValidRoomCodes();
 		GV_UserSatisfaction = 100;
 		GV_GameLevel = 2;
-		GV_LevelTimeRemaining = 4 * 60;
+		GV_LevelTimeRemaining = Math.min(2 * 60 + GV_GameLevel * 30, 4 * 60);
 		clientSpawnRate = 0.25 * GV_GameLevel;
 		GV_NewClientsRemaining = 17 * GV_GameLevel;
 		bgm.loop();
