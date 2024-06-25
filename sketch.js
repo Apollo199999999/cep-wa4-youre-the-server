@@ -96,18 +96,13 @@ function setup() {
 	// Game timer
 	setInterval(() => { GV_LevelTimeRemaining -= 1; }, 1000);
 
-	// Replace draw function with setInterval (more consistent fps)
-	setInterval(() => { drawInterval() }, 1000 / 60);
-
 	bgm.setVolume(0.35);
 	bgm.loop();
 }
 
 function draw() {
 	background('#202020');
-}
 
-function drawInterval() {
 	// Assign toolbar frame document
 	toolbarDocument = toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
 
@@ -249,11 +244,11 @@ function displayConfetti() {
 		particles.push(particle);
 	}
 
-	if (GV_ShouldPlaySfx) {
+	if (GV_ShouldPlaySfx){
 		sfx_levelUp.setVolume(8.0);
 		sfx_levelUp.play();
-	}
-
+	} 
+	
 	// Apply force on particles
 	let timer = setInterval(() => {
 		for (let i = particles.length - 1; i >= 0; i--) {
