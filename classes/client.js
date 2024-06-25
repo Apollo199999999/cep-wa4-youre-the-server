@@ -152,7 +152,7 @@ class Client {
             this.startChangeStateTimer();
         }
         else {
-            this.startRoomTimer();
+            setTimeout(() => { this.startRoomTimer(); }, random(0, 8000));
             this.resolveWindowId = crypto.randomUUID();
         }
     }
@@ -182,8 +182,8 @@ class Client {
             let resolveWindows = document.getElementsByClassName("resolve-window");
             for (let i = 0; i < resolveWindows.length; i++) {
                 if (resolveWindows[i].dataset.clientRoomCode == this.roomCode && resolveWindows[i].dataset.clientUUID == this.resolveWindowId) {
-                   resolveWindows[i].remove();
-                   this.resolveWindowOpened = false;
+                    resolveWindows[i].remove();
+                    this.resolveWindowOpened = false;
                 }
             }
         }
@@ -196,17 +196,17 @@ class Client {
     startChangeStateTimer() {
         this.clientTimer = setInterval(() => {
             this.changeStateFunction();
-        }, 5500);
+        }, 5400);
     }
 
     startRoomTimer() {
         this.roomTimer = setInterval(() => {
             this.generateRequest()
-        }, random(5500, 8000));
+        }, random(5000, 10000));
     }
 
     generateRequest() {
-        if (GV_NewClientsRemaining <= 0 && this.hasRequest == false) {
+        if ((GV_NewClientsRemaining <= 0 || newClientsCollection.childArr.length <= 1) && this.hasRequest == false) {
             // Probability of generating request depends on game level
             let probability = Math.random();
             if (probability < Math.min(0.05 * GV_GameLevel, 0.4)) {

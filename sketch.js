@@ -6,7 +6,7 @@ const SKETCH_HEIGHT = Math.min(document.documentElement.clientHeight, document.d
 let randomWordClass;
 
 // Client spawning rate
-let clientSpawnRate = 0.25 * GV_GameLevel;
+let clientSpawnRate = 0.15 + 0.10 * GV_GameLevel;
 
 // Declare variables to preload images
 let clientHappyImg, clientIrritatedImg, clientAngryImg, clientAni;
@@ -107,7 +107,7 @@ function draw() {
 	toolbarDocument = toolbarFrame.elt.contentDocument || toolbarFrame.elt.contentWindow.document;
 
 	// Whether to spawn new clients
-	if (frameCount % (60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true && GV_NewClientsRemaining > 0) {
+	if (frameCount % Math.floor(60 / clientSpawnRate) == 0 && newClientsCollection.canAddchild() == true && GV_NewClientsRemaining > 0) {
 		// Add a new client
 		// Username should be max 6 chars long
 		let username = capitalizeFirstLetter(randomWordClass.generateWordWithMaxLength(4)) + Math.floor(random(10, 100));
@@ -162,9 +162,9 @@ function draw() {
 		initCollections();
 		generateValidRoomCodes();
 		GV_UserSatisfaction = 100;
-		GV_GameLevel = 2;
+		GV_GameLevel += 1;
 		GV_LevelTimeRemaining = Math.min(2 * 60 + GV_GameLevel * 30, 4 * 60);
-		clientSpawnRate = 0.25 * GV_GameLevel;
+		clientSpawnRate = 0.15 + 0.10 * GV_GameLevel;
 		GV_NewClientsRemaining = 17 * GV_GameLevel;
 		bgm.loop();
 		displayConfetti();
