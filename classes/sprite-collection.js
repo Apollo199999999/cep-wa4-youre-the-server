@@ -204,6 +204,9 @@ class SpriteCollection {
             }
         }
 
+        this.childPlaceholder.tile = '{';
+        this.childPlaceholder.removeAll();
+        this.childPlaceholder.tile = '{';
         this.backgroundSprite.remove();
         this.spriteRemoved = true;
     }

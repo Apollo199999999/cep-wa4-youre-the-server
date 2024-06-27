@@ -158,6 +158,7 @@ function draw() {
 		clickedItem = null;
 		roomsCollection.removeAllSprites();
 		newClientsCollection.removeAllSprites();
+		allSprites.removeAll();
 		resetToolbar(toolbarDocument);
 		bgm.stop();
 

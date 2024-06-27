@@ -152,12 +152,18 @@ class Client {
             this.startChangeStateTimer();
         }
         else {
-            setTimeout(() => { this.startRoomTimer(); }, random(0, 8000));
+            setTimeout(() => { this.startRoomTimer(); }, random(0, 15000));
             this.resolveWindowId = crypto.randomUUID();
         }
     }
 
     remove() {
+        // Remove the corresponding "resolve window" if applicable
+        this.removeResolveWindow();
+
+        this.sprite.remove();
+        this.spriteRemoved = true;
+
         if (this.clientTimer != null) {
             clearInterval(this.clientTimer);
         }
@@ -169,12 +175,6 @@ class Client {
         if (this.clientCollection != null) {
             this.clientCollection.remove(this);
         }
-
-        // Remove the corresponding "resolve window" if applicable
-        this.removeResolveWindow();
-
-        this.sprite.remove();
-        this.spriteRemoved = true;
     }
 
     removeResolveWindow() {
@@ -209,7 +209,7 @@ class Client {
         if ((GV_NewClientsRemaining <= 0 || newClientsCollection.childArr.length <= 1) && this.hasRequest == false) {
             // Probability of generating request depends on game level
             let probability = Math.random();
-            if (probability < Math.min(0.05 * GV_GameLevel, 0.4)) {
+            if (probability < Math.min(0.04 + 0.01 * GV_GameLevel, 0.4)) {
                 if (GV_ShouldPlaySfx) this.requestSfx.play();
                 this.hasRequest = true;
                 this.requestContentType = Math.random();
