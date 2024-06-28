@@ -149,7 +149,7 @@ function draw() {
 
 	// Trigger gameover if applicable
 	if (GV_UserSatisfaction <= 0) {
-		window.location.href = "gameOver.html";
+		window.location.href = "gameOver.html?level=" + GV_GameLevel;
 	}
 
 	// If no time is remaining, progress to the next level
@@ -169,7 +169,7 @@ function draw() {
 		GV_GameLevel += 1;
 		GV_LevelTimeRemaining = Math.min(2 * 60 + GV_GameLevel * 30, 4 * 60);
 		clientSpawnRate = 0.15 + 0.10 * GV_GameLevel;
-		GV_NewClientsRemaining = 17 * GV_GameLevel;
+		GV_NewClientsRemaining = Math.min(10 + 10 * GV_GameLevel, 50);
 		bgm.loop();
 		displayConfetti();
 	}
@@ -339,9 +339,26 @@ function addNewRoom(roomCode) {
 
 			// Add new room
 			// x and y for the new room doesn't matter -- they will get updated when the roomscollection gets updated
-			let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, validRoomTileChars[roomsCollection.childArr.length], roomCode, interBold);
-			roomsCollection.push(newRoom);
+			// Find an available tileChar for the room
+			let availableChars = [];
 
+			for (let i = 0; i < validRoomTileChars.length; i++) {
+				availableChars.push(validRoomTileChars[i]);
+			}
+
+			for (let i = 0; i < roomsCollection.childArr.length; i++) {
+				let room = roomsCollection.childArr[i];
+				if (availableChars.includes(room.tileChar)) {
+					let index = availableChars.indexOf(room.tileChar);
+					availableChars.splice(index, 1);
+				}
+			}
+
+			if (availableChars.length > 0) {
+				let newRoom = new SpriteCollection(0, 0, 3, 3, testClientSprite.w, testClientSprite.h, availableChars[0], roomCode, interBold);
+				roomsCollection.push(newRoom);
+			}
+			
 			testClientSprite.remove();
 		}
 		else {
@@ -392,7 +409,7 @@ function getAllRooms() {
 function addNewClientToRoom(roomCode) {
 	if (roomCode != "null" && clickedItem instanceof Client && clickedItem.clientCollection.collectionHeader != roomCode) {
 		for (let i = 0; i < roomsCollection.childArr.length; i++) {
-			if (roomsCollection.childArr[i].collectionHeader == roomCode) {
+			if (roomsCollection.childArr[i].collectionHeader == roomCode && roomsCollection.childArr[i].canAddchild() == true) {
 				// Create a new client to push into the room
 				let newClient =
 					new Client(clickedItem.username,
@@ -422,6 +439,13 @@ function addNewClientToRoom(roomCode) {
 				clickedItem.remove();
 				break;
 			}
+			else if (roomsCollection.childArr[i].canAddchild() == false) {
+				Swal.fire({
+					title: "Room already full!",
+					text: "No more clients can be added to this room.",
+					icon: "error"
+				});
+			}
 		}
 	}
 	else if (roomCode == "null") {
@@ -436,6 +460,7 @@ function addNewClientToRoom(roomCode) {
 // Called from toolbar.js, does what the function name says
 function kickNewClickedClient() {
 	if (clickedItem instanceof Client) {
+		GV_NewClientsRemaining += 1;
 		clickedItem.remove();
 	}
 }

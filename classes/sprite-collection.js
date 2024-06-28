@@ -7,6 +7,7 @@ class SpriteCollection {
         this.numCols = numCols;
         this.collectionHeader = collectionHeader;
         this.fontStyle = fontStyle;
+        this.tileChar = tileChar;
 
         // spriteRemoved property - same as client
         this.spriteRemoved = false;

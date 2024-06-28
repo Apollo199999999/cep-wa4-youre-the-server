@@ -1,3 +1,8 @@
 window.onload = (event) => {
-    document.getElementById("levelText").innerHTML = "Last played level: Level " + GV_GameLevel;
+    const urlParams = new URLSearchParams(
+        window.location.search,
+    );
+
+    let level = urlParams.get('level');
+    document.getElementById("levelText").innerHTML = "Last played level: Level " + level;
 };

@@ -158,12 +158,6 @@ class Client {
     }
 
     remove() {
-        // Remove the corresponding "resolve window" if applicable
-        this.removeResolveWindow();
-
-        this.sprite.remove();
-        this.spriteRemoved = true;
-
         if (this.clientTimer != null) {
             clearInterval(this.clientTimer);
         }
@@ -175,6 +169,12 @@ class Client {
         if (this.clientCollection != null) {
             this.clientCollection.remove(this);
         }
+
+        // Remove the corresponding "resolve window" if applicable
+        this.removeResolveWindow();
+
+        this.sprite.remove();
+        this.spriteRemoved = true;
     }
 
     removeResolveWindow() {
